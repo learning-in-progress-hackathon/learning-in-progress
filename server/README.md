@@ -10,11 +10,13 @@ In dev, the client's Vite server proxies `/api` to this server on port 8000, so 
 uv sync
 ```
 
+Copy `.env.example` to `.env` and add your Gemini API key.
+
 ## Run
 
 ```sh
-uv run fastapi dev   # development: auto-reload, localhost only
-uv run fastapi run   # production: no reload, listens on 0.0.0.0
+uv run --env-file .env fastapi dev   # development: auto-reload, localhost only
+uv run --env-file .env fastapi run   # production: no reload, listens on 0.0.0.0
 ```
 
 API docs: http://localhost:8000/docs

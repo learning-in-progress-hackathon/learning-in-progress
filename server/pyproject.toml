@@ -5,6 +5,7 @@ description = "API server for Learning in Progress"
 requires-python = ">=3.14"
 dependencies = [
     "fastapi[standard]>=0.162.0",
+    "google-genai>=2.33.0",
 ]
 
 [dependency-groups]
