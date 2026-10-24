@@ -1,0 +1,35 @@
+---
+name: website
+field.page_title: Short page title for the browser tab, max 60 characters.
+field.headline: Main headline shown at the top of the page, one sentence.
+field.tagline: One-sentence subtitle under the headline.
+field.body_html: The main page content as HTML using only <section>, <h2>, <p>, <ul>, <li>, <strong>, <em>. No <script>, <style>, or inline event handlers.
+raw: body_html
+---
+<!--
+  TODO: replace this with your real website template.
+  Every {{placeholder}} below becomes a field Claude must fill.
+  Describe each one in the header above as `field.<name>: ...` so Claude knows what to write.
+  Values are HTML-escaped unless listed in `raw:` (use raw only for fields that should contain HTML).
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{page_title}}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 0 auto; padding: 24px 16px; line-height: 1.6; }
+    header { border-bottom: 1px solid #ddd; margin-bottom: 24px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>{{headline}}</h1>
+    <p>{{tagline}}</p>
+  </header>
+  <main>
+    {{body_html}}
+  </main>
+</body>
+</html>
