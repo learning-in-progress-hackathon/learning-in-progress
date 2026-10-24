@@ -72,11 +72,9 @@ export const likeSuggestions = [
   'Less text on the screen',
 ]
 
-export type StepId =
-  'welcome' | 'about' | 'goal' | 'survey' | 'notes' | 'review'
+export type StepId = 'about' | 'goal' | 'survey' | 'notes' | 'review'
 
 export const steps: { id: StepId; title: string }[] = [
-  { id: 'welcome', title: 'Welcome' },
   { id: 'about', title: 'About you' },
   { id: 'goal', title: 'Your goal' },
   { id: 'survey', title: 'How you learn' },
@@ -91,7 +89,6 @@ const surveyMinutes = 5
 
 export function buildScreens(survey: Survey): Screen[] {
   return [
-    { step: 'welcome', minutes: 0 },
     { step: 'about', minutes: 1 },
     { step: 'goal', minutes: 2 },
     ...survey.categories.map((c) => ({

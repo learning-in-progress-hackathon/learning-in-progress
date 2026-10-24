@@ -23,7 +23,10 @@ export function Home({ onStart }: HomeProps) {
         <button className="primary large" onClick={onStart}>
           Los geht's <ArrowRight />
         </button>
-        <small>Dauert etwa 4 Minuten · Keine Vorkenntnisse nötig</small>
+        <small>
+          Dauert etwa 8 Minuten · Keine Vorkenntnisse nötig · Du siehst alles,
+          was wir über dich wissen
+        </small>
       </div>
       <div className="hero-art" aria-hidden="true">
         <div className="orbit orbit-one" />

@@ -1,7 +1,5 @@
-import type { Step } from './data'
-
 type TopbarProps = {
-  step: Step
+  step: number
   onHome: () => void
 }
 

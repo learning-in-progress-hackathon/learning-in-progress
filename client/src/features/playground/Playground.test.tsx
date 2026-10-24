@@ -53,7 +53,7 @@ describe('Playground', () => {
       .fn<typeof fetch>()
       .mockResolvedValueOnce(sse('done', question))
       .mockResolvedValueOnce(sse('done', finished))
-    const openMock = vi.fn<typeof window.open>()
+    const openMock = vi.fn<(url: string | URL, target?: string) => void>()
     vi.stubGlobal('fetch', fetchMock)
     vi.stubGlobal('open', openMock)
     renderApp()

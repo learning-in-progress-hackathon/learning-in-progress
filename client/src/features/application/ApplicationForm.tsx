@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react'
 import { useCreateProfile } from '@/api/profile'
 import { useSurveyQuestions } from '@/api/survey'
 import {
@@ -13,11 +13,11 @@ import { AboutStep } from './AboutStep'
 import { AssessmentScreen } from './AssessmentScreen'
 import { toProfileRequest } from './studentProfile'
 import { GoalStep } from './GoalStep'
+import { MagicStep } from './MagicStep'
 import { NotesStep } from './NotesStep'
 import { ProfilePanel } from './ProfilePanel'
 import { ReviewStep } from './ReviewStep'
 import { SurveyStep } from './SurveyStep'
-import { WelcomeStep } from './WelcomeStep'
 import {
   buildScreens,
   loadProfile,
@@ -27,6 +27,8 @@ import {
   type Screen,
   type StepId,
 } from './profile'
+
+type Ending = 'assess' | 'magic'
 
 export type StepProps = {
   profile: Profile
@@ -61,7 +63,6 @@ function validate(
 }
 
 const primaryLabel: Record<StepId, string> = {
-  welcome: 'Let’s start',
   about: 'Continue',
   goal: 'Continue',
   survey: 'Continue',
@@ -69,7 +70,7 @@ const primaryLabel: Record<StepId, string> = {
   review: 'Build my tool',
 }
 
-// The intake flow: welcome, about you, your goal, the learning survey, your notes, and a final check.
+// The intake flow: about you, your goal, the learning survey, your notes, and a final check.
 function Form() {
   const survey = useSurvey()
   const screens = buildScreens(survey)
@@ -77,12 +78,14 @@ function Form() {
   const [profile, setProfile] = useState<Profile>(loadProfile)
   const [errors, setErrors] = useState<StepProps['errors']>({})
   const [finished, setFinished] = useState(false)
+  // Which flow runs after the profile is built: our assessment, or the Magic page.
+  const [ending, setEnding] = useState<Ending>('assess')
   const createProfile = useCreateProfile()
   const panel = useRef<HTMLDivElement>(null)
 
   const screen = screens[index]
   const step = steps.find((s) => s.id === screen.step)!
-  const counted = steps.slice(1)
+  const counted = steps
   const stepNumber = counted.findIndex((s) => s.id === screen.step) + 1
   const minutesLeft = Math.ceil(
     screens.slice(index).reduce((sum, s) => sum + s.minutes, 0),
@@ -112,11 +115,14 @@ function Form() {
     )
   }
 
-  // "Build my tool": the server scores the survey and returns the student's profile JSON.
-  const buildProfile = () =>
+  // "Build my tool" and "Magic page": the server scores the survey and returns the student's profile JSON.
+  const buildProfile = (target: Ending) => {
+    if (createProfile.isPending) return
+    setEnding(target)
     createProfile.mutate(toProfileRequest(profile), {
       onSuccess: () => setFinished(true),
     })
+  }
 
   const moveTo = (target: number) => {
     setErrors({})
@@ -131,12 +137,16 @@ function Form() {
     setErrors(found)
     if (Object.keys(found).length) return
     if (screen.step !== 'review') moveTo(index + 1)
-    else if (!createProfile.isPending) buildProfile()
+    else buildProfile('assess')
   }
 
   const stepProps = { profile, update, errors }
   const showPanel = ['about', 'goal', 'notes'].includes(screen.step)
   const canSkip = screen.step === 'survey' || screen.step === 'notes'
+
+  if (finished && createProfile.data && ending === 'magic') {
+    return <MagicStep topic={profile.topic} profileJson={createProfile.data} />
+  }
 
   if (finished && createProfile.data) {
     return (
@@ -157,16 +167,10 @@ function Form() {
     >
       <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-rule px-6 py-4 text-sm md:px-8">
         <span>
-          {screen.step === 'welcome' ? (
-            <span className="font-medium">Your learning profile</span>
-          ) : (
-            <>
-              <span className="font-medium">
-                Step {stepNumber} of {counted.length}
-              </span>{' '}
-              · {step.title}
-            </>
-          )}
+          <span className="font-medium">
+            Step {stepNumber} of {counted.length}
+          </span>{' '}
+          · {step.title}
           <span className="text-graphite">
             {' '}
             ·{' '}
@@ -207,7 +211,6 @@ function Form() {
             screen.step === 'survey' && 'mx-auto w-full max-w-3xl',
           )}
         >
-          {screen.step === 'welcome' && <WelcomeStep />}
           {screen.step === 'about' && <AboutStep {...stepProps} />}
           {screen.step === 'goal' && <GoalStep {...stepProps} />}
           {screen.step === 'survey' && category && (
@@ -261,8 +264,20 @@ function Form() {
                   {screen.step === 'survey' ? 'Skip this part' : 'Skip for now'}
                 </button>
               )}
+              {screen.step === 'review' && (
+                <button
+                  type="button"
+                  className="primary large"
+                  onClick={() => buildProfile('magic')}
+                >
+                  {createProfile.isPending && ending === 'magic'
+                    ? 'Building…'
+                    : 'Magic page'}
+                  <Sparkles size={18} aria-hidden />
+                </button>
+              )}
               <button type="submit" className="primary large">
-                {createProfile.isPending
+                {createProfile.isPending && ending === 'assess'
                   ? 'Building…'
                   : primaryLabel[screen.step]}
                 <ArrowRight size={18} aria-hidden />

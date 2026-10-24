@@ -40,13 +40,10 @@ afterEach(() => {
 
 describe('Learn', () => {
   it('generates every theme at once and switches between them', async () => {
-    const fetchMock = vi.fn<typeof fetch>((_url, init) =>
-      Promise.resolve(
-        page(
-          JSON.parse(typeof init?.body === 'string' ? init.body : '{}').theme,
-        ),
-      ),
-    )
+    const fetchMock = vi.fn<typeof fetch>((_url, init) => {
+      const body = typeof init?.body === 'string' ? init.body : '{}'
+      return Promise.resolve(page(JSON.parse(body).theme as string))
+    })
     vi.stubGlobal('fetch', fetchMock)
     const id = saveRun(run)
     renderAt(`/learn/${id}`)

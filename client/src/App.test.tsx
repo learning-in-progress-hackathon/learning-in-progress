@@ -23,13 +23,27 @@ describe('App', () => {
     ).toBeInTheDocument()
   })
 
-  it('walks through the first onboarding question', async () => {
+  it('jumps into the application flow from "Los geht\'s"', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn<typeof fetch>(async () =>
+        Response.json({
+          version: 'test',
+          response_scale: { min: 1, max: 5, labels: [] },
+          categories: [],
+          questions: [],
+        }),
+      ),
+    )
     const user = userEvent.setup()
     renderAt('/')
 
     await user.click(screen.getByRole('button', { name: /los geht's/i }))
 
-    expect(screen.getByText(/wann fühlt sich lernen/i)).toBeInTheDocument()
+    expect(
+      await screen.findByRole('heading', { name: /learning with/i }),
+    ).toBeInTheDocument()
+    vi.unstubAllGlobals()
   })
 
   it('renders the application form at /application', async () => {
@@ -47,7 +61,7 @@ describe('App', () => {
     renderAt('/application')
 
     expect(
-      await screen.findByRole('heading', { name: /shape learning/i }),
+      await screen.findByRole('heading', { name: /learning with/i }),
     ).toBeInTheDocument()
     vi.unstubAllGlobals()
   })

@@ -105,8 +105,10 @@ function mockServer(profileResponse: Response = Response.json({})) {
 }
 
 async function fillAboutAndGoal(user: ReturnType<typeof userEvent.setup>) {
-  await user.click(await screen.findByRole('button', { name: /let’s start/i }))
-  await user.type(screen.getByLabelText('What should we call you?'), 'Lina')
+  await user.type(
+    await screen.findByLabelText('What should we call you?'),
+    'Lina',
+  )
   await user.click(screen.getByRole('button', { name: 'School' }))
   await user.click(screen.getByRole('button', { name: /continue/i }))
 
@@ -123,10 +125,7 @@ describe('ApplicationForm', () => {
     const user = userEvent.setup()
     renderForm()
 
-    await user.click(
-      await screen.findByRole('button', { name: /let’s start/i }),
-    )
-    await user.click(screen.getByRole('button', { name: /continue/i }))
+    await user.click(await screen.findByRole('button', { name: /continue/i }))
 
     expect(screen.getByText('Tell us what to call you.')).toBeInTheDocument()
     expect(screen.getByText('Pick the one that fits best.')).toBeInTheDocument()
@@ -252,6 +251,25 @@ describe('ApplicationForm', () => {
       screen.getByRole('heading', { name: /what works for you/i }),
     ).toBeInTheDocument()
     expect(screen.queryByText('Keeping things in mind')).not.toBeInTheDocument()
+  })
+
+  it('opens the Magic page instead when the student picks it', async () => {
+    mockServer(Response.json({ learning_instructions: {} }))
+    const user = userEvent.setup()
+    renderForm()
+    await fillAboutAndGoal(user)
+    for (let i = 0; i < survey.categories.length; i++) {
+      await user.click(screen.getByRole('button', { name: /skip this part/i }))
+    }
+    await user.click(screen.getByRole('button', { name: /skip for now/i }))
+    await user.click(screen.getByRole('button', { name: 'Magic page' }))
+
+    expect(
+      await screen.findByRole('heading', { name: /magische lösung/i }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: /lösung öffnen/i }),
+    ).toBeInTheDocument()
   })
 
   it('stays on the review with a message when the server can’t build the profile', async () => {

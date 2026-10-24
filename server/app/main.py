@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.routers import assess, generate, health, profile, survey
+from app.routers import assess, generate, health, profile, solution, survey
 
 app = FastAPI(title="Learning in Progress API")
 
@@ -10,3 +10,4 @@ app.include_router(assess.router, prefix="/api")
 app.include_router(generate.router, prefix="/api")
 app.include_router(survey.router, prefix="/api")
 app.include_router(profile.router, prefix="/api")
+app.include_router(solution.router, prefix="/api")
