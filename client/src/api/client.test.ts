@@ -1,4 +1,4 @@
-import { ApiError, request } from './client'
+import { ApiError, request, streamRequest } from './client'
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status })
@@ -56,5 +56,46 @@ describe('request', () => {
     await expect(request('/thing')).rejects.toEqual(
       new ApiError('Could not reach the server.'),
     )
+  })
+})
+
+describe('streamRequest', () => {
+  it('calls onEvent for each event, even when split across chunks', async () => {
+    const chunks = [
+      'event: status\ndata: {"text":"Thin',
+      'king…"}\n\nevent: done\ndata: {"html":"<p>Hi</p>"}\n\n',
+    ]
+    const body = new ReadableStream({
+      start(controller) {
+        for (const chunk of chunks)
+          controller.enqueue(new TextEncoder().encode(chunk))
+        controller.close()
+      },
+    })
+    stubFetch().mockResolvedValue(new Response(body))
+    const onEvent = vi.fn<(event: string, data: unknown) => void>()
+
+    await streamRequest('/thing', { body: {}, onEvent })
+
+    expect(onEvent.mock.calls).toEqual([
+      ['status', { text: 'Thinking…' }],
+      ['done', { html: '<p>Hi</p>' }],
+    ])
+  })
+
+  it('throws the server detail message on errors', async () => {
+    stubFetch().mockResolvedValue(json({ detail: 'Bad input' }, 422))
+
+    await expect(
+      streamRequest('/thing', { body: {}, onEvent: vi.fn<() => void>() }),
+    ).rejects.toEqual(new ApiError('Bad input', 422))
+  })
+
+  it('reports an unreachable server', async () => {
+    stubFetch().mockRejectedValue(new TypeError('Failed to fetch'))
+
+    await expect(
+      streamRequest('/thing', { body: {}, onEvent: vi.fn<() => void>() }),
+    ).rejects.toEqual(new ApiError('Could not reach the server.'))
   })
 })
