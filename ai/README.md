@@ -1,16 +1,24 @@
 # ai/
 
-Form JSON in → Claude → filled HTML page out.
+Form JSON in → Claude or any OpenAI-compatible API → filled HTML page out.
 
 ## 1. Add your API key
 
-1. Create a key at https://platform.claude.com → **Settings → API Keys → Create Key** (copy it, it's shown once).
+1. Create a key (copy it, it's shown only once):
+   - Claude: https://platform.claude.com → **Settings → API Keys → Create Key**
+   - OpenAI: https://platform.openai.com/api-keys → **Create new secret key**
+   - Or any OpenAI-compatible provider (OpenRouter, Groq, Gemini, a local Ollama, ...)
 2. Copy `ai/.env.example` to `ai/.env` and paste the key:
    ```
-   ANTHROPIC_API_KEY=sk-ant-...
+   AI_API_KEY=sk-...
+   ```
+   A `sk-ant-...` key uses Claude. Any other key uses the OpenAI-compatible API. For providers other than OpenAI, also set:
+   ```
+   AI_MODEL=model-name-from-that-provider
+   AI_BASE_URL=https://...    # auto-detected for OpenRouter, Groq and Gemini keys
    ```
 
-`ai/.env` is git-ignored. Never commit it or put the key in frontend code. If it leaks, revoke it in the Console.
+`ai/.env` is git-ignored. Never commit it or put the key in frontend code. If it leaks, revoke it right away.
 
 ## 2. Define your prompts
 

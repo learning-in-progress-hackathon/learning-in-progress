@@ -19,7 +19,7 @@ import json
 from pathlib import Path
 from xml.sax.saxutils import escape
 
-from .claude_client import ask_json
+from .llm import ask_json
 from .prompts import (
     describe_fields,
     fill_output,
