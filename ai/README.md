@@ -19,6 +19,7 @@ Form JSON in → Claude → filled HTML page out.
 | `prompts/form_to_website.md` | Instructions for Claude. `system:` in the header sets the system prompt. `{{answers}}` is replaced with the form answers. |
 | `templates/output/website.html` | The page layout. Each `{{name}}` is a field Claude fills in. Describe each one in the header as `field.name: ...`. |
 | `examples/sample_form.json` | A sample form input to test with. |
+| `examples/curriculum.txt` | A sample attached file (PDF, image or text work). `example.py` shows how to attach it. |
 
 Text inside `<!-- -->` comments is ignored.
 

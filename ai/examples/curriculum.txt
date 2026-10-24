@@ -1,0 +1,28 @@
+BIO 101 - Introduction to Cell Biology
+Undergraduate, 1st year - Fall semester (12 weeks)
+
+Course goal
+Understand the structure and function of cells, from molecules to whole-cell processes.
+
+Weekly topics
+Week 1  - What is life? Characteristics of living things, the cell theory
+Week 2  - Chemistry of life: water, pH, carbon and macromolecules
+Week 3  - Proteins: amino acids, folding, enzymes
+Week 4  - Prokaryotic vs. eukaryotic cells, organelles overview
+Week 5  - Cell membrane: structure, diffusion, osmosis, active transport
+Week 6  - Midterm review + MIDTERM EXAM
+Week 7  - Cellular respiration: glycolysis, Krebs cycle, electron transport chain
+Week 8  - Photosynthesis: light reactions and the Calvin cycle
+Week 9  - DNA structure and replication
+Week 10 - Gene expression: transcription and translation
+Week 11 - Cell cycle, mitosis and meiosis
+Week 12 - Final review
+
+Assessment
+- Midterm exam (week 6) ........ 30%
+- Lab reports (4 total) ........ 20%
+- Final exam (week 13) ......... 50%
+
+Final exam
+Covers all weeks, with extra weight on weeks 7-11.
+Format: 40 multiple-choice questions + 3 short-answer questions, 2 hours.
