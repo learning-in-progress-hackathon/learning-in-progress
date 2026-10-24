@@ -8,10 +8,8 @@ export type Profile = {
   interests: string
   goalType: string
   goal: string
-  deadline: string
   topic: string
-  texts: string[]
-  links: string[]
+  text: string
   files: File[]
   answers: Answers
   likes: string[]
@@ -25,10 +23,8 @@ export const emptyProfile: Profile = {
   interests: '',
   goalType: '',
   goal: '',
-  deadline: '',
   topic: '',
-  texts: [],
-  links: [],
+  text: '',
   files: [],
   answers: {},
   likes: [],

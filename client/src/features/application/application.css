@@ -83,6 +83,12 @@
     color 0.2s;
 }
 
+/* Answer options can be a short sentence, so they wrap instead of overflowing on phones. */
+.application-page .secondary-button.wrap {
+  white-space: normal;
+  text-align: left;
+}
+
 .application-page .secondary-button:hover {
   border-color: var(--pine);
   color: var(--pine-deep);

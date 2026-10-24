@@ -29,8 +29,7 @@ function Tag({ children }: { children: ReactNode }) {
 
 // Live summary next to each step, on ruled notebook paper. Shows the student what we know so far.
 function ProfilePanel({ profile }: { profile: Profile }) {
-  const material =
-    profile.texts.length + profile.links.length + profile.files.length
+  const material = (profile.text.trim() ? 1 : 0) + profile.files.length
   const stage = [profile.stage, profile.stageDetail].filter(Boolean).join(' · ')
   const answered = Object.keys(profile.answers).length
   const totalQuestions = useSurvey().questions.length

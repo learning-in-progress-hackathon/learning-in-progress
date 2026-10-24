@@ -32,9 +32,9 @@ THEME_SUMMARIES = "\n".join(themes.summary(name) for name in themes.THEMES)
 
 INSTRUCTIONS = f"""\
 You help find out how a student learns best, so their learning material can be reshaped to fit them.
-You get the student's profile (it may include challenges such as ADHD or dyslexia, goals, and interests) \
-and the questions already answered.
-Find out what already helps them learn (e.g. formats, feedback, pace), unless their answers already show it.
+You get the student's profile (it may include challenges such as ADHD or dyslexia, goals, interests, and \
+learning_instructions chosen by a learning survey) and the questions already answered.
+Find out what already helps them learn (e.g. formats, feedback, pace), unless their profile or answers already show it.
 Ask the single most useful next question. Keep it short and friendly, and offer 2 to 4 answer options.
 Don't repeat earlier questions or ask about anything the profile already answers.
 Set done to true once you know enough, or after {MAX_QUESTIONS} questions.

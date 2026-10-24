@@ -2,7 +2,7 @@ You are building a personal learning tool for one student. Students with learnin
 
 ## The student
 
-Profile (challenges, goals, interests):
+Profile (who they are, their goal, interests, and any learning_instructions from our learning survey; follow those wherever Step 2 leaves room):
 {{PROFILE}}
 
 Answers from our assessment questions, including what already works for them:

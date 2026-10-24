@@ -13,7 +13,9 @@ describe('HermesProgress', () => {
     expect(screen.getByText('🔍 web_search')).toBeInTheDocument()
     expect(screen.getByText('0:00')).toBeInTheDocument()
 
-    act(() => vi.advanceTimersByTime(83_000))
+    act(() => {
+      vi.advanceTimersByTime(83_000)
+    })
 
     expect(screen.getByText('1:23')).toBeInTheDocument()
   })

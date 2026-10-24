@@ -40,8 +40,7 @@ function ReviewStep({
 }: StepProps & { goTo: (step: StepId) => void }) {
   const answered = Object.keys(profile.answers).length
   const questions = useSurvey().questions.length
-  const material =
-    profile.texts.length + profile.links.length + profile.files.length
+  const material = (profile.text.trim() ? 1 : 0) + profile.files.length
   const stage = [profile.stage, profile.stageDetail].filter(Boolean).join(' · ')
 
   return (
@@ -72,16 +71,6 @@ function ReviewStep({
             </>
           ) : (
             <Empty>No goal yet</Empty>
-          )}
-          {profile.deadline && (
-            <p className="text-graphite">
-              By{' '}
-              {new Date(profile.deadline).toLocaleDateString('en-GB', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric',
-              })}
-            </p>
           )}
         </Section>
 

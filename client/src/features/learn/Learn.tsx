@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
-import type { ThemeName } from '@/api/assess'
+import { themeTitles, type ThemeName } from '@/api/assess'
 import { useGeneratePage } from '@/api/generate'
 import { HermesProgress } from '@/components/HermesProgress'
 import { LearningPage } from '@/components/LearningPage'
@@ -39,7 +39,7 @@ export function Learn() {
             variant={pick.theme === selected ? 'default' : 'outline'}
             onClick={() => setSelected(pick.theme)}
           >
-            {pick.theme}
+            {themeTitles[pick.theme]}
           </Button>
         ))}
       </div>
@@ -83,7 +83,7 @@ function ThemePanel({ id, run, theme, hidden }: ThemePanelProps) {
     if (saved || started.current) return
     started.current = true
     start()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [])
 
   const html = saved ?? generate.data?.html

@@ -53,7 +53,7 @@ describe('Playground', () => {
       .fn<typeof fetch>()
       .mockResolvedValueOnce(sse('done', question))
       .mockResolvedValueOnce(sse('done', finished))
-    const openMock = vi.fn()
+    const openMock = vi.fn<typeof window.open>()
     vi.stubGlobal('fetch', fetchMock)
     vi.stubGlobal('open', openMock)
     renderApp()
@@ -63,16 +63,14 @@ describe('Playground', () => {
       await screen.findByRole('button', { name: 'Listening' }),
     )
     expect(await screen.findByText(/You like listening/)).toBeInTheDocument()
-    await userEvent.click(
-      screen.getByRole('button', { name: 'Generate' }),
-    )
+    await userEvent.click(screen.getByRole('button', { name: 'Generate' }))
 
     expect(fetchMock.mock.calls[1][1]?.body).toBe(
       JSON.stringify({ profile: mockStudent.profile, answers }),
     )
     const [url, target] = openMock.mock.calls[0]
     expect(target).toBe('_blank')
-    expect(loadRun(url.replace('/learn/', ''))).toEqual({
+    expect(loadRun(String(url).replace('/learn/', ''))).toEqual({
       profile: mockStudent.profile,
       answers,
       material: mockStudent.material,

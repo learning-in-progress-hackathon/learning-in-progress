@@ -2,18 +2,23 @@ import { useMutation } from '@tanstack/react-query'
 import { streamResult, type StreamProgress } from '@/api/client'
 import { useStreamProgress } from '@/api/progress'
 
-export type Profile = {
-  name: string
-  challenges: string[]
-  goals: string
-  interests: string[]
-}
+// Any student profile JSON: the application form's profile, or a test persona in the playground.
+export type Profile = Record<string, unknown>
 
 export type Answer = { question: string; answer: string }
 
 // Learning page formats the server can generate; matches the files in server/app/prompts/themes.
 export type ThemeName =
   'chunked' | 'fill-blanks' | 'hobby-framing' | 'read-aloud' | 'teach-the-ai'
+
+// Names to show the student; match the titles in the theme files.
+export const themeTitles: Record<ThemeName, string> = {
+  chunked: 'Chunked steps',
+  'fill-blanks': 'Fill in the blanks',
+  'hobby-framing': 'Hobby framing',
+  'read-aloud': 'Read aloud',
+  'teach-the-ai': 'Teach the AI',
+}
 
 // A theme picked for the student. The reason is empty when the server fell back to the default theme.
 export type ThemePick = { theme: ThemeName; reason: string }

@@ -1,10 +1,8 @@
+import type { ProfileRequest, StudentProfile } from '@/api/profile'
 import type { Profile } from './profile'
 
-// What POST /api/profile returns: the student's profile JSON, with the chosen instructions per category.
-export type StudentProfileJson = Record<string, unknown>
-
 // The form data in the shape the server expects. Survey answers go raw; the server does the scoring.
-export function toProfileRequest(profile: Profile) {
+export function toProfileRequest(profile: Profile): ProfileRequest {
   return {
     student: {
       name: profile.name,
@@ -15,12 +13,10 @@ export function toProfileRequest(profile: Profile) {
     goal: {
       type: profile.goalType,
       in_their_words: profile.goal,
-      deadline: profile.deadline || null,
     },
     material: {
       topic: profile.topic,
-      texts: profile.texts,
-      links: profile.links,
+      text: profile.text.trim(),
       files: profile.files.map((f) => f.name),
     },
     answers: profile.answers,
@@ -31,15 +27,16 @@ export function toProfileRequest(profile: Profile) {
   }
 }
 
-export async function createProfile(
-  profile: Profile,
-): Promise<StudentProfileJson> {
-  const response = await fetch('/api/profile', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(toProfileRequest(profile)),
-  })
-  if (!response.ok)
-    throw new Error(`Profile request failed: ${response.status}`)
-  return response.json()
+// The profile Hermes gets for the assessment and the page. The pasted text is left out, because it can be
+// long and the page gets it separately as the material.
+export function profileForHermes(profile: StudentProfile) {
+  const { text: _text, ...material } = profile.material
+  return { ...profile, material }
+}
+
+// The material the page teaches: the topic, then the pasted text.
+export function materialText(profile: StudentProfile): string {
+  return [profile.material.topic, profile.material.text]
+    .filter(Boolean)
+    .join('\n\n')
 }

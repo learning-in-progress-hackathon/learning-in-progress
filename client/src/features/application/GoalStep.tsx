@@ -47,20 +47,6 @@ function GoalStep({ profile, update, errors }: StepProps) {
           />
         </Field>
 
-        <Field
-          id="deadline"
-          label="Is there a date you’re working towards?"
-          optional
-        >
-          <Input
-            id="deadline"
-            type="date"
-            value={profile.deadline}
-            onChange={(e) => update({ deadline: e.target.value })}
-            className="max-w-56"
-          />
-        </Field>
-
         <hr className="border-t border-dashed border-rule" />
 
         <Field id="topic" label="What are you learning?" error={errors.topic}>

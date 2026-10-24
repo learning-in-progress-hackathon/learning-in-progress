@@ -41,7 +41,11 @@ afterEach(() => {
 describe('Learn', () => {
   it('generates every theme at once and switches between them', async () => {
     const fetchMock = vi.fn<typeof fetch>((_url, init) =>
-      Promise.resolve(page(JSON.parse(String(init?.body)).theme)),
+      Promise.resolve(
+        page(
+          JSON.parse(typeof init?.body === 'string' ? init.body : '{}').theme,
+        ),
+      ),
     )
     vi.stubGlobal('fetch', fetchMock)
     const id = saveRun(run)
@@ -60,7 +64,7 @@ describe('Learn', () => {
     const [first, second] = screen.getAllByRole('tabpanel', { hidden: true })
     expect(first).toBeVisible()
     expect(second).not.toBeVisible()
-    await userEvent.click(screen.getByRole('tab', { name: 'chunked' }))
+    await userEvent.click(screen.getByRole('tab', { name: 'Chunked steps' }))
     expect(first).not.toBeVisible()
     expect(second).toBeVisible()
   })
