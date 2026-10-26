@@ -1,0 +1,107 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s17 .center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 70px;
+    }
+    .s17 .omt {
+      font-size: 120px;
+      font-weight: 600;
+      letter-spacing: -0.06em;
+      color: var(--ink);
+    }
+    .s17 .url {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      padding: 40px 64px;
+      border-radius: 999px;
+      background: #fff;
+      border: 2px solid var(--accent);
+      box-shadow: 0 25px 60px rgba(73, 55, 154, 0.22);
+    }
+    .s17 .url svg { width: 64px; height: 64px; flex: none; }
+    .s17 .url-text {
+      display: grid;
+      font-size: 88px;
+      font-weight: 700;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .s17 .url-text > span { grid-area: 1 / 1; }
+    .s17 .ghost { visibility: hidden; }
+    .s17 .ch { display: none; }
+    .s17 .ch.a { color: var(--accent); }
+    .s17 .caret {
+      display: inline-block;
+      width: 7px;
+      height: 0.82em;
+      margin-left: 6px;
+      border-radius: 4px;
+      background: var(--accent);
+      vertical-align: -0.08em;
+    }
+  </style>
+  <div id="root" data-composition-id="s17" data-width="1920" data-height="1080">
+    <div class="slide s17">
+      <div class="center">
+        <div class="omt" id="s17-omt">Wir sind <em>JETZT</em> live auf:</div>
+        <div class="url" id="s17-url">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#6955c6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <div class="url-text" id="s17-t" aria-label="binnendifferenzierung.online"><span class="ghost" aria-hidden="true">binnendifferenzierung.online</span><span class="typed" aria-hidden="true"><span class="ch a">b</span><span class="ch a">i</span><span class="ch a">n</span><span class="ch a">n</span><span class="ch a">e</span><span class="ch a">n</span><span class="ch a">d</span><span class="ch a">i</span><span class="ch a">f</span><span class="ch a">f</span><span class="ch a">e</span><span class="ch a">r</span><span class="ch a">e</span><span class="ch a">n</span><span class="ch a">z</span><span class="ch a">i</span><span class="ch a">e</span><span class="ch a">r</span><span class="ch a">u</span><span class="ch a">n</span><span class="ch a">g</span><span class="ch">.</span><span class="ch">o</span><span class="ch">n</span><span class="ch">l</span><span class="ch">i</span><span class="ch">n</span><span class="ch">e</span><i class="caret" id="s17-caret"></i></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+    var E = "power3.out";
+
+    // Fade-and-rise entrance, the deck's default motion.
+    function rise(tl, target, at, opts) {
+      tl.fromTo(
+        target,
+        { opacity: 0, y: opts && opts.y != null ? opts.y : 40 },
+        Object.assign({ opacity: 1, y: 0, duration: 0.45, ease: E }, opts || {}, { y: 0 }),
+        at,
+      );
+    }
+
+    // Every slide's brand + kicker enter the same way.
+    function head(tl, id) {
+      rise(tl, "." + id + " .brand", 0, { y: 0, duration: 0.5 });
+      rise(tl, "." + id + " .kicker", 0.1);
+    }
+
+      
+
+    // S17 · Wir sind jetzt live — holds at 0.7 and 3.1 (the domain types itself in)
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      // Alone on the slide it sits centred; it lifts when the URL pill arrives.
+      tl.fromTo("#s17-omt", { opacity: 0, y: 190 }, { opacity: 1, y: 130, duration: 0.5, ease: E }, 0.05);
+      tl.fromTo("#s17-omt", { y: 130 }, { y: 0, duration: 0.45, ease: "power3.inOut", immediateRender: false }, 0.8);
+      tl.fromTo("#s17-url", { opacity: 0, scale: 0.85, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: "back.out(1.6)" }, 0.9);
+      var chars = document.querySelectorAll("#s17-t .ch");
+      for (var i = 0; i < chars.length; i++) {
+        tl.fromTo(chars[i], { display: "none" }, { display: "inline", duration: 0.001 }, 1.2 + i * 0.04);
+      }
+      var endType = 1.2 + chars.length * 0.04;
+      tl.fromTo("#s17-caret", { opacity: 1 }, { opacity: 0, duration: 0.2, ease: "power1.out", immediateRender: false }, endType + 0.1);
+      tl.fromTo("#s17-url", { boxShadow: "0 25px 60px rgba(73,55,154,0.22)" }, { boxShadow: "0 30px 100px rgba(73,55,154,0.42)", duration: 0.25, ease: "power1.out", yoyo: true, repeat: 1, immediateRender: false }, endType + 0.15);
+      tl.set({}, {}, 3.5);
+      window.__timelines["s17"] = tl;
+    })();
+    })();
+  </script>
+</template>

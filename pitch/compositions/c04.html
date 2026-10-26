@@ -1,0 +1,161 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    /* Light blueprint sheet: blue tile pair on cream */
+    .c04 .sheet {
+      position: absolute;
+      left: 170px;
+      top: 260px;
+      width: 1580px;
+      height: 700px;
+      border-radius: 24px;
+      border: 1px solid #cfdfe9;
+      background-color: #e3eef5;
+      background-image:
+        linear-gradient(rgba(71, 113, 138, 0.16) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(71, 113, 138, 0.16) 2px, transparent 2px),
+        linear-gradient(rgba(71, 113, 138, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(71, 113, 138, 0.08) 1px, transparent 1px);
+      background-size: 200px 200px, 200px 200px, 40px 40px, 40px 40px;
+      background-position: -2px -2px;
+      box-shadow: var(--card-shadow);
+    }
+    .c04 .sheet::after {
+      content: "";
+      position: absolute;
+      inset: 26px;
+      border: 2px solid rgba(71, 113, 138, 0.32);
+      border-radius: 10px;
+    }
+    .c04 .row {
+      position: absolute;
+      left: 0;
+      top: 300px;
+      width: 1920px;
+      height: 140px;
+    }
+    .c04 .note {
+      position: absolute;
+      top: 0;
+      width: 340px;
+      text-align: center;
+      line-height: 1.1;
+    }
+    .c04 .note span {
+      display: block;
+      font-size: 48px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #47718a;
+    }
+    .c04 .note b {
+      display: block;
+      font-size: 72px;
+      font-weight: 600;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+    }
+    .c04 .note b.ki { color: var(--accent); }
+    .c04 svg.arrows,
+    .c04 svg.draw {
+      position: absolute;
+      left: 0;
+      top: 0;
+      overflow: visible;
+    }
+    .c04 .line {
+      fill: none;
+      stroke: #47718a;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .c04 .lens {
+      fill: rgba(105, 85, 198, 0.08);
+      stroke: var(--accent);
+      stroke-width: 8;
+      stroke-linecap: round;
+    }
+    .c04 .word {
+      position: absolute;
+      font-size: 60px;
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+  </style>
+  <div id="root" data-composition-id="c04" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide c04">
+      <div class="pad"><div class="kicker" id="c04-k">Bauplan</div></div>
+      <div class="sheet" id="c04-sheet" aria-hidden="true"></div>
+
+      <div class="row" id="c04-row">
+        <svg class="arrows" width="1920" height="140" viewBox="0 0 1920 140" aria-hidden="true">
+          <path class="line c04-ar" pathLength="1" d="M620 96 H770 M752 82 L772 96 L752 110" />
+          <path class="line c04-ar" pathLength="1" d="M1150 96 H1300 M1282 82 L1302 96 L1282 110" />
+        </svg>
+        <div class="note" id="c04-n1" style="left: 270px"><span>Idee:</span><b>Mensch</b></div>
+        <div class="note" id="c04-n2" style="left: 790px"><span>Recherche:</span><b class="ki">KI</b></div>
+        <div class="note" id="c04-n3" style="left: 1310px"><span>Auswahl:</span><b>Mensch</b></div>
+      </div>
+
+      <svg class="draw" width="1920" height="1080" viewBox="0 0 1920 1080" aria-hidden="true">
+        <!-- small house -->
+        <path class="line" id="c04-g1" pathLength="1" d="M360 910 H780" />
+        <path class="line" id="c04-house" pathLength="1" d="M440 910 V752 M680 752 V910 M418 760 L560 648 L702 760 M540 910 V844 H582 V910 M470 786 H516 V828 H470 Z M604 786 H650 V828 H604 Z" />
+        <!-- tall tower -->
+        <g transform="translate(-60 0)">
+        <path class="line" id="c04-g2" pathLength="1" d="M1110 910 H1440" />
+        <path class="line" id="c04-tower" pathLength="1" d="M1180 910 V520 H1320 V910 M1250 520 V462 M1180 585 H1320 M1180 650 H1320 M1180 715 H1320 M1180 780 H1320 M1180 845 H1320 M1250 520 V910" />
+        <!-- magnifying glass -->
+        <g id="c04-mag">
+          <circle class="lens" id="c04-lens" pathLength="1" cx="1352" cy="640" r="72" />
+          <path class="lens" id="c04-handle" pathLength="1" d="M1404 692 L1466 754" style="fill: none; stroke-width: 14" />
+        </g>
+        </g>
+      </svg>
+
+      <div class="word" id="c04-w1" style="left: 730px; top: 812px">allein</div>
+      <div class="word" id="c04-w2" style="left: 1440px; top: 790px">unter<br />Aufsicht</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var E = "power3.out";
+      function rise(tl, target, at, opts) {
+        tl.fromTo(target, { opacity: 0, y: opts && opts.y != null ? opts.y : 26 }, Object.assign({ opacity: 1, y: 0, duration: 0.42, ease: E }, opts || {}, { y: 0 }), at);
+      }
+      function draw(tl, target, at, dur, opts) {
+        tl.fromTo(target, { strokeDasharray: 1, strokeDashoffset: 1 }, Object.assign({ strokeDashoffset: 0, duration: dur, ease: "power2.inOut" }, opts || {}), at);
+      }
+
+      // C04 · Bauplan — holds at 1.2 (who does what) and 2.8 (room alone, tower supervised)
+      var tl = gsap.timeline({ paused: true });
+      rise(tl, "#c04-k", 0, { y: 20 });
+      tl.fromTo("#c04-sheet", { opacity: 0, scale: 0.98 }, { opacity: 1, scale: 1, duration: 0.5, ease: E }, 0.05);
+      // the plan sits centred on the sheet first
+      tl.set("#c04-row", { y: 235 }, 0);
+      rise(tl, "#c04-n1", 0.3);
+      rise(tl, "#c04-n2", 0.45);
+      rise(tl, "#c04-n3", 0.6);
+      draw(tl, ".c04-ar", 0.6, 0.4, { stagger: 0.12 });
+
+      // click: plan moves up, the building rules get drawn below
+      tl.fromTo("#c04-row", { y: 235 }, { y: 0, duration: 0.5, ease: "power3.inOut", immediateRender: false }, 1.25);
+      draw(tl, "#c04-g1", 1.5, 0.3);
+      draw(tl, "#c04-house", 1.6, 0.55);
+      rise(tl, "#c04-w1", 1.95);
+      draw(tl, "#c04-g2", 1.7, 0.3);
+      draw(tl, "#c04-tower", 1.8, 0.55);
+      tl.fromTo("#c04-mag", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 2.05);
+      draw(tl, ["#c04-lens", "#c04-handle"], 2.05, 0.4, { stagger: 0.1 });
+      rise(tl, "#c04-w2", 2.25);
+      tl.set({}, {}, 3.2);
+      window.__timelines["c04"] = tl;
+    })();
+  </script>
+</template>

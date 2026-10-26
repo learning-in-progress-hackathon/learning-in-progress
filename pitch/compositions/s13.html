@@ -1,0 +1,150 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s13 .list {
+      position: absolute;
+      left: 170px;
+      top: 230px;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 70px;
+    }
+    .s13 .list li {
+      position: relative;
+      font-size: 150px;
+      font-weight: 700;
+      letter-spacing: -0.055em;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .s13 .d { position: relative; display: inline-block; }
+    .s13 .d .glyph { display: inline-block; }
+    .s13 .d .slash {
+      position: absolute;
+      left: -6%;
+      right: -6%;
+      top: 47%;
+      height: 14px;
+      border-radius: 99px;
+      background: #c4573a;
+      transform-origin: left center;
+      rotate: -24deg;
+    }
+    /* Hand-drawn "N" written straight over the struck D */
+    .s13 .scribble {
+      position: absolute;
+      left: -4%;
+      top: -8%;
+      width: 108%;
+      height: 104%;
+      overflow: visible;
+      rotate: -5deg;
+    }
+    .s13 .scribble path {
+      fill: none;
+      stroke: #c4573a;
+      stroke-width: 15;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .s13 .sci { display: inline-block; }
+    /* "Störer": a sticker-style call to action */
+    .s13 .try {
+      position: absolute;
+      left: 1220px;
+      top: 720px;
+      display: inline-flex;
+      align-items: center;
+      gap: 22px;
+      padding: 30px 46px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 56px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      box-shadow: 0 25px 60px rgba(41, 38, 50, 0.28);
+    }
+    .s13 .try svg { width: 52px; height: 52px; }
+    .s13 .dotimg {
+      position: absolute;
+      left: 640px;
+      top: 190px;
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: 50% 58%;
+      border: 6px solid #fff;
+      background: #0b0b10;
+      box-shadow: 0 20px 50px rgba(47, 40, 75, 0.22);
+    }
+  </style>
+  <div id="root" data-composition-id="s13" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide s13">
+      <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span>morph</div>
+      <ul class="list">
+        <li id="s13-i1"><span class="d" aria-label="N"><span class="glyph" id="s13-d">D</span><span class="slash" id="s13-slash"></span><svg class="scribble" id="s13-n" viewBox="0 0 100 150" preserveAspectRatio="none" aria-hidden="true"><path id="s13-np" pathLength="1" d="M16 136 C 15 104, 17 62, 22 20 C 40 56, 62 100, 80 132 C 81 96, 82 56, 86 14"/></svg></span>OTS</li>
+        <li id="s13-i2">DSGVOh <em>Yeah!</em></li>
+        <li id="s13-i3"><span class="strike-wrap" id="s13-bias"><span id="s13-bt">BIAS</span><span class="strike" id="s13-bx"></span></span> <em class="sci" id="s13-sci">SCIENCE.</em></li>
+      </ul>
+      <img class="dotimg" id="s13-dot" src="assets/images/blob.png" alt="Blauer Flauschblob mit schwarzer Baskenmütze" />
+      <div class="try" id="s13-try">Let's try it out<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+    var E = "power3.out";
+
+    // Fade-and-rise entrance, the deck's default motion.
+    function rise(tl, target, at, opts) {
+      tl.fromTo(
+        target,
+        { opacity: 0, y: opts && opts.y != null ? opts.y : 40 },
+        Object.assign({ opacity: 1, y: 0, duration: 0.45, ease: E }, opts || {}, { y: 0 }),
+        at,
+      );
+    }
+
+    // Every slide's brand + kicker enter the same way.
+    function head(tl, id) {
+      rise(tl, "." + id + " .brand", 0, { y: 0, duration: 0.5 });
+      rise(tl, "." + id + " .kicker", 0.1);
+    }
+
+      
+
+    // S13 · Nots — one click per step: holds at 0.6, 1.8, 2.6, 3.3, 4.3, 5.4
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      rise(tl, ".s13 .brand", 0, { y: 0, duration: 0.3 });
+      rise(tl, "#s13-i1", 0.05);
+      tl.fromTo("#s13-dot", { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.6)" }, 0.2);
+      // click 1: strike the D, fade it back, hand-write the N over it
+      tl.fromTo("#s13-slash", { scaleX: 0 }, { scaleX: 1, duration: 0.25, ease: "power2.in" }, 0.7);
+      tl.fromTo("#s13-d", { opacity: 1 }, { opacity: 0.22, duration: 0.3, ease: "power1.out" }, 0.85);
+      tl.fromTo("#s13-slash", { opacity: 1 }, { opacity: 0.45, duration: 0.3, ease: "power1.out" }, 0.85);
+      tl.fromTo("#s13-np", { strokeDashoffset: 1, strokeDasharray: 1 }, { strokeDashoffset: 0, strokeDasharray: 1, duration: 0.6, ease: "power1.inOut" }, 0.95);
+      tl.fromTo("#s13-n", { scale: 0.96 }, { scale: 1, duration: 0.2, ease: "back.out(3)" }, 1.55);
+      // click 2
+      rise(tl, "#s13-i2", 1.9);
+      // click 3
+      rise(tl, "#s13-i3", 2.7);
+      tl.set("#s13-sci", { opacity: 0 }, 0);
+      // click 4: BIAS is struck out, SCIENCE takes its place
+      tl.fromTo("#s13-bx", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.inOut" }, 3.4);
+      tl.fromTo("#s13-bt", { opacity: 1 }, { opacity: 0.3, duration: 0.3 }, 3.6);
+      tl.fromTo("#s13-sci", { opacity: 0, scale: 0.6, rotation: -6 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.45, ease: "back.out(2.4)" }, 3.7);
+      // click 5: the "Let's try it out" sticker slaps on
+      tl.fromTo("#s13-try", { opacity: 0, scale: 2.2, rotation: 10 }, { opacity: 1, scale: 1, rotation: -6, duration: 0.4, ease: "back.out(1.8)" }, 4.45);
+      tl.fromTo("#s13-try", { x: 0 }, { keyframes: { x: [0, -10, 8, -4, 0] }, duration: 0.3, ease: "none" }, 4.85);
+      tl.set({}, {}, 6);
+      window.__timelines["s13"] = tl;
+    })();
+    })();
+  </script>
+</template>

@@ -1,0 +1,97 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s03 .center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .s03 .kicker { position: absolute; left: 170px; top: 150px; }
+    .s03 .gram {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 44px;
+      color: #8c8891;
+      margin-bottom: 18px;
+    }
+    .s03 .word {
+      font-size: 172px;
+      font-weight: 700;
+      letter-spacing: -0.06em;
+      white-space: nowrap;
+      transform-origin: 50% 70%;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .s03 .squash { display: inline-block; transform-origin: 50% 80%; }
+    .s03 .def {
+      margin-top: 46px;
+      max-width: 1300px;
+      font-size: 46px;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+  </style>
+  <div id="root" data-composition-id="s03" data-width="1920" data-height="1080">
+    <div class="slide s03">
+      <div class="kicker" id="s03-k">In Germany we call it</div>
+      <div class="center">
+        <div class="gram" id="s03-g">die, Substantiv, feminin</div>
+        <div class="word" id="s03-w"><span class="squash" id="s03-sq">Binnendifferenzierung</span></div>
+        <p class="def" id="s03-d">Pädagogische Methode, um die individuelle Förderung aller Lernenden in einer Klasse sicherzustellen.</p>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+    var E = "power3.out";
+
+    // Fade-and-rise entrance, the deck's default motion.
+    function rise(tl, target, at, opts) {
+      tl.fromTo(
+        target,
+        { opacity: 0, y: opts && opts.y != null ? opts.y : 40 },
+        Object.assign({ opacity: 1, y: 0, duration: 0.45, ease: E }, opts || {}, { y: 0 }),
+        at,
+      );
+    }
+
+    // Every slide's brand + kicker enter the same way.
+    function head(tl, id) {
+      rise(tl, "." + id + " .kicker", 0, { y: 20 });
+    }
+
+      
+
+    // S03 · Binnendifferenzierung — slams in
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      head(tl, "s03");
+      // Slam: the word falls in from huge, squashes on impact, the page jolts.
+      tl.fromTo("#s03-w", { opacity: 0, scale: 3.2 }, { opacity: 1, scale: 1, duration: 0.42, ease: "expo.in" }, 0.05);
+      tl.fromTo("#s03-sq", { scaleY: 1, scaleX: 1 }, {
+        keyframes: [
+          { scaleY: 0.86, scaleX: 1.03, duration: 0.07, ease: "power2.out" },
+          { scaleY: 1.04, scaleX: 0.99, duration: 0.12, ease: "power2.inOut" },
+          { scaleY: 1, scaleX: 1, duration: 0.16, ease: "power2.out" },
+        ],
+      }, 0.47);
+      tl.fromTo(".s03", { x: 0, y: 0 }, {
+        keyframes: { x: [0, -16, 13, -8, 4, 0], y: [0, 10, -6, 4, -2, 0] },
+        duration: 0.4, ease: "none",
+      }, 0.47);
+      rise(tl, "#s03-g", 0.6, { y: 20 });
+      rise(tl, "#s03-d", 0.65, { duration: 0.5 });
+      tl.set({}, {}, 2);
+      window.__timelines["s03"] = tl;
+    })();
+    })();
+  </script>
+</template>

@@ -1,0 +1,238 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s09 .side { position: absolute; left: 170px; top: 150px; width: 330px; }
+    .s09 .cap {
+      position: absolute;
+      left: 170px;
+      top: 250px;
+      width: 330px;
+      font-size: 50px;
+      font-weight: 600;
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+    .s09 .win {
+      position: absolute;
+      left: 540px;
+      top: 150px;
+      width: 1210px;
+      height: 800px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 30px 80px rgba(60, 53, 88, 0.16);
+      overflow: hidden;
+      z-index: 2;
+    }
+    .s09 .bar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 18px;
+      background: #fbfaf7;
+      border-bottom: 1px solid #eeeae3;
+    }
+    .s09 .bar i { width: 12px; height: 12px; border-radius: 50%; background: #e1ded5; }
+    .s09 .bar span { margin-left: 18px; padding: 4px 16px; border-radius: 999px; background: #f0ede7; color: #5f5a66; font-size: 17px; }
+    .s09 .vp { position: absolute; left: 0; top: 44px; width: 1210px; height: 756px; overflow: hidden; background: #f7f5ef; }
+    .s09 .cam { position: absolute; left: 0; top: 0; width: 2160px; height: 1350px; }
+    .s09 .shot { position: absolute; left: 0; top: 0; width: 2160px; height: 1350px; }
+    .s09 .cursor { position: absolute; left: 0; top: 0; width: 46px; height: 46px; z-index: 5; }
+    .s09 .ring { position: absolute; left: 0; top: 0; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 5px solid var(--accent); z-index: 4; }
+
+    /* Peter's AI twin */
+    .s09 .links { position: absolute; inset: 0; width: 1920px; height: 1080px; z-index: 1; overflow: visible; }
+    .s09 .links path { fill: none; stroke: #c8c1dc; stroke-width: 3; stroke-linecap: round; }
+    .s09 .links path.flow { stroke: var(--accent); stroke-width: 4; stroke-dasharray: 1; }
+    .s09 .twin {
+      position: absolute;
+      left: 1320px;
+      top: 590px;
+      width: 200px;
+      height: 200px;
+      margin: -100px 0 0 -100px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #806bd9, #5743ae);
+      box-shadow: 0 25px 60px rgba(73, 55, 154, 0.32);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      z-index: 3;
+    }
+    .s09 .twin b { font-size: 84px; font-weight: 700; line-height: 1; letter-spacing: -0.05em; }
+    .s09 .twin span { margin-top: 6px; font-size: 26px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.9; }
+    .s09 .halo {
+      position: absolute;
+      left: 1320px;
+      top: 590px;
+      width: 200px;
+      height: 200px;
+      margin: -100px 0 0 -100px;
+      border-radius: 50%;
+      border: 3px solid #bcb0f2;
+      z-index: 2;
+    }
+    .s09 .node {
+      position: absolute;
+      padding: 14px 26px 16px;
+      border-radius: 999px;
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      white-space: nowrap;
+      box-shadow: 0 14px 32px rgba(47, 40, 75, 0.12);
+      z-index: 3;
+    }
+  </style>
+  <div id="root" data-composition-id="s09" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide s09">
+      <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span>morph</div>
+      <div class="side"><div class="kicker" id="s09-k">Verstehen</div></div>
+      <div class="cap" id="s09-c0">Fragen, die auf <em>Forschung</em> beruhen.</div>
+      <div class="cap" id="s09-c1">MORPH fasst <em>zusammen.</em></div>
+      <div class="cap" id="s09-c2">Peters <em>AI Twin.</em></div>
+
+      <svg class="links" id="s09-links" viewBox="0 0 1920 1080" aria-hidden="true">
+        <path class="flow" id="s09-f1" pathLength="1" d="M 755 520 C 900 520, 1020 560, 1220 585" />
+        <path class="flow" id="s09-f2" pathLength="1" d="M 755 640 C 920 660, 1040 620, 1225 605" />
+        <path class="flow" id="s09-f3" pathLength="1" d="M 755 760 C 960 760, 1080 680, 1240 640" />
+      </svg>
+      <div class="halo" id="s09-halo" aria-hidden="true"></div>
+      <div class="twin" id="s09-twin"><b>P</b><span>AI Twin</span></div>
+      <div id="s09-nodes"></div>
+
+      <div class="win" id="s09-win">
+        <div class="bar"><i></i><i></i><i></i><span>binnendifferenzierung.online</span></div>
+        <div class="vp">
+          <div class="cam" id="s09-cam">
+            <img class="shot" id="s09-d1" src="assets/journey/b01-deck-focus.webp" alt="Karte: Dein Fokus kommt in kurzen Schüben" />
+            <img class="shot" id="s09-d2" src="assets/journey/b02-deck-start.webp" alt="Karte: Anfangen ist der schwierige Teil" />
+            <img class="shot" id="s09-d3" src="assets/journey/b03-deck-morph.webp" alt="Morph fragt nach" />
+            <img class="shot" id="s09-sum" src="assets/journey/b04-summary.webp" alt="Das habe ich verstanden" />
+            <img class="shot" id="s09-rev" src="assets/journey/b05-review.webp" alt="Klingt das nach dir?" />
+            <div class="ring" id="s09-ring" aria-hidden="true"></div>
+            <svg class="cursor" id="s09-cur" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2l15 9.5-6.6 1.4 3.9 7.3-3 1.6-3.9-7.3L4 19z" fill="#292632" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      // S09 · Verstehen — the research-based deck, Morph's own question, the summary, then Peter's AI twin.
+      // Holds: 2.5 (Morph asks), 4.2 (summary), 7.6 (AI twin). Screenshot pixels: 2160×1350.
+      var W = 2160, H = 1350, VW = 1210, VH = 756, BASE = VW / W;
+      var R = { stimmt: [1086, 721, 606, 76], ok: [276, 612, 242, 76] };
+      var tl = gsap.timeline({ paused: true });
+      var camAt = { x: 0, y: 0, scale: BASE };
+      var curAt = { x: 1700, y: 1200 };
+      function cam(at, cx, cy, z, dur) {
+        var s = BASE * z;
+        var next = { x: Math.min(0, Math.max(VW - W * s, VW / 2 - cx * s)), y: Math.min(0, Math.max(VH - H * s, VH / 2 - cy * s)), scale: s };
+        tl.fromTo("#s09-cam", camAt, Object.assign({ duration: dur, ease: "power2.inOut", immediateRender: false }, next), at);
+        camAt = next;
+      }
+      function show(at, id, dur) {
+        tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: dur || 0.3, ease: "power1.out" }, at);
+      }
+      function point(at, r, dur) {
+        var next = { x: r[0] + r[2] * 0.5, y: r[1] + r[3] * 0.55 };
+        tl.fromTo("#s09-cur", curAt, Object.assign({ duration: dur || 0.35, ease: "power2.inOut", immediateRender: false }, next), at);
+        curAt = next;
+      }
+      function click(at, r) {
+        tl.fromTo("#s09-ring", { x: r[0] + r[2] * 0.5, y: r[1] + r[3] * 0.5, scale: 0.3, opacity: 0.9 }, { scale: 1.2, opacity: 0, duration: 0.4, ease: "power2.out", immediateRender: false }, at);
+        tl.fromTo("#s09-cur", { scale: 1 }, { scale: 0.82, duration: 0.08, yoyo: true, repeat: 1, ease: "power1.inOut", immediateRender: false }, at);
+      }
+      function caption(at, out, inn) {
+        if (out) tl.fromTo(out, { opacity: 1, y: 0 }, { opacity: 0, y: -20, duration: 0.25, ease: "power1.in", immediateRender: false }, at);
+        tl.fromTo(inn, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, at + (out ? 0.2 : 0));
+      }
+
+      // The twin's facets, worded as in Peter's real profile (deck cards, notes, goal).
+      var NODES = [
+        ["Fokus in kurzen Schüben", 1050, 250, "t-peach"],
+        ["Anfangen ist schwer", 1575, 250, "t-peach"],
+        ["Lesen kostet Kraft", 985, 400, "t-peach"],
+        ["Hausaufgaben < 45 Min", 1600, 400, "t-blue"],
+        ["Minecraft", 1020, 590, "t-lav"],
+        ["Photosynthese · Kl. 10", 1640, 590, "t-blue"],
+        ["Kurze Videos", 1010, 790, "t-lav"],
+        ["Klar und praktisch", 1600, 790, "t-mint"],
+        ["Lernt durch Ausprobieren", 1320, 930, "t-mint"],
+      ];
+      var host = document.getElementById("s09-nodes");
+      var svg = document.getElementById("s09-links");
+      var nodes = [], spokes = [];
+      NODES.forEach(function (n, i) {
+        var el = document.createElement("div");
+        el.className = "node " + n[3];
+        el.id = "s09-n" + i;
+        el.textContent = n[0];
+        el.style.left = n[1] + "px";
+        el.style.top = n[2] + "px";
+        host.appendChild(el);
+        nodes.push(el);
+        var p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        p.setAttribute("d", "M 1320 590 L " + n[1] + " " + n[2]);
+        p.setAttribute("pathLength", "1");
+        p.style.strokeDasharray = "1";
+        svg.appendChild(p);
+        spokes.push(p);
+      });
+
+      tl.set(["#s09-d2", "#s09-d3", "#s09-sum", "#s09-rev", "#s09-ring", "#s09-c1", "#s09-c2", "#s09-twin", "#s09-halo"], { opacity: 0 }, 0);
+      tl.set(nodes, { opacity: 0, xPercent: -50, yPercent: -50 }, 0);
+      tl.set(["#s09-f1", "#s09-f2", "#s09-f3"].concat(spokes), { strokeDashoffset: 1 }, 0);
+      tl.set("#s09-cam", { transformOrigin: "0 0", scale: BASE, x: 0, y: 0 }, 0);
+      tl.set("#s09-cur", { x: curAt.x, y: curAt.y, transformOrigin: "0 0" }, 0);
+      tl.set("#s09-win", { transformOrigin: "0 0" }, 0);
+
+      // entrance → hold 2.5: research-based cards, then a question Morph wrote for Peter
+      tl.fromTo(".s09 .brand", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0);
+      tl.fromTo("#s09-k", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0);
+      tl.fromTo("#s09-win", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.05);
+      caption(0.25, null, "#s09-c0");
+      cam(0.4, 1390, 700, 1.3, 0.6);
+      point(0.6, R.stimmt, 0.4);
+      click(1.05, R.stimmt);
+      show(1.15, "#s09-d2", 0.25);
+      click(1.65, R.stimmt);
+      show(1.75, "#s09-d3", 0.25);
+      tl.fromTo("#s09-d3", { scale: 1.02, transformOrigin: "1390px 640px" }, { scale: 1, duration: 0.4, ease: "back.out(2)" }, 1.75);
+
+      // → hold 4.2: "Das habe ich verstanden"
+      click(2.65, R.stimmt);
+      show(2.8, "#s09-sum", 0.3);
+      caption(2.8, "#s09-c0", "#s09-c1");
+      cam(2.9, 1080, 560, 1.35, 0.6);
+      point(3.4, R.ok, 0.5);
+
+      // → hold 7.6: confirm, review, and the profile becomes Peter's AI twin
+      click(4.3, R.ok);
+      show(4.45, "#s09-rev", 0.3);
+      cam(4.45, 1080, 675, 1, 0.5);
+      tl.fromTo("#s09-cur", { opacity: 1 }, { opacity: 0, duration: 0.2, immediateRender: false }, 4.6);
+      caption(4.6, "#s09-c1", "#s09-c2");
+      tl.fromTo("#s09-win", { x: 0, y: 0, scale: 1 }, { x: -370, y: 300, scale: 0.48, duration: 0.8, ease: "power3.inOut", immediateRender: false }, 5.0);
+      tl.fromTo(["#s09-f1", "#s09-f2", "#s09-f3"], { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.6, ease: "power2.inOut", stagger: 0.1 }, 5.6);
+      tl.fromTo("#s09-twin", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, 5.95);
+      tl.fromTo("#s09-halo", { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 1.9, duration: 0.9, ease: "power2.out" }, 6.2);
+      nodes.forEach(function (el, i) {
+        var at = 6.25 + i * 0.1;
+        tl.fromTo(spokes[i], { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, at);
+        tl.fromTo(el, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2.2)" }, at + 0.15);
+      });
+      tl.set({}, {}, 8);
+      window.__timelines["s09"] = tl;
+    })();
+  </script>
+</template>

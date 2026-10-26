@@ -1,0 +1,116 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s12 .h2 { margin-top: 34px; font-size: 80px; }
+    .s12 .sub {
+      margin-top: 20px;
+      max-width: 1580px;
+      font-size: 40px;
+      line-height: 1.35;
+      color: var(--muted);
+      letter-spacing: -0.015em;
+    }
+    .s12 .cards {
+      position: absolute;
+      left: 170px;
+      top: 494px;
+      width: 893px;
+      height: 446px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .s12 .cards .idea { flex: 1; justify-content: center; }
+    .s12 .photo {
+      position: absolute;
+      left: 1081px;
+      top: 494px;
+      width: 669px;
+      height: 446px;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(60, 53, 88, 0.2);
+    }
+    .s12 .photo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .s12 .photo .idea {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 18px;
+      background: rgba(255, 255, 255, 0.94);
+    }
+    .s12 .idea {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--card-shadow);
+      padding: 22px 26px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .s12 .idea small {
+      display: inline-block;
+      padding: 2px 14px 4px;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .s12 .idea p {
+      font-size: 40px;
+      line-height: 1.12;
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+    }
+  </style>
+  <div id="root" data-composition-id="s12" data-width="1920" data-height="1080">
+    <div class="slide s12">
+      <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span>morph</div>
+      <div class="pad">
+        <div class="kicker" id="s12-k">The&nbsp;<span class="strike-wrap">Sky<span class="strike"></span></span>&nbsp;AI&nbsp;is the limit</div>
+        <div class="h2" id="s12-h">Dein Bedürfnis? Kein <em>Problem.</em></div>
+        <p class="sub" id="s12-sub">MORPH generiert nicht nur eine personalisierte UI. Es erfindet ganz neue Wege, mit Wissen zu interagieren – mit allem, was dir zur Verfügung steht.</p>
+      </div>
+      <div class="cards">
+        <div class="idea" id="s12-c1"><small class="t-peach">I(ncredible)OT</small><p>Your Electric Toothbrush Becomes a Pomodoro Timer</p></div>
+        <div class="idea" id="s12-c2"><small class="t-mint">Webcam-based Eye-Tracker</small><p>Your Eyes Become the Interface</p></div>
+      </div>
+      <div class="photo" id="s12-photo">
+        <img src="assets/images/lernzimmer.png" alt="Lernzimmer mit Osmose-Simulation am Laptop und Smart-Light-Ambiente" />
+        <div class="idea" id="s12-c3"><small class="t-blue">AI Object Recognition</small><p>Your Entire Room Becomes a Living Cell</p></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var E = "power3.out";
+      function rise(tl, target, at, opts) {
+        tl.fromTo(target, { opacity: 0, y: opts && opts.y != null ? opts.y : 28 }, Object.assign({ opacity: 1, y: 0, duration: 0.45, ease: E }, opts || {}, { y: 0 }), at);
+      }
+
+      // S12 · AI is the limit — everything is on screen at once; hold at 0.8
+      var tl = gsap.timeline({ paused: true });
+      rise(tl, ".s12 .brand", 0, { y: 0, duration: 0.3 });
+      rise(tl, "#s12-k", 0, { y: 20 });
+      rise(tl, "#s12-h", 0.05, { y: 40, duration: 0.5 });
+      rise(tl, "#s12-sub", 0.15);
+      rise(tl, ".s12 .cards .idea", 0.2, { y: 40, stagger: 0.06 });
+      tl.fromTo("#s12-photo", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.5, ease: E }, 0.25);
+      rise(tl, "#s12-c3", 0.4, { y: 20 });
+      tl.set({}, {}, 1.5);
+      window.__timelines["s12"] = tl;
+    })();
+  </script>
+</template>

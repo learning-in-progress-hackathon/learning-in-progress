@@ -1,0 +1,120 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .c05 .h2 {
+      margin-top: 26px;
+      font-size: 74px;
+      letter-spacing: -0.045em;
+      white-space: nowrap;
+    }
+    .c05 svg.chart {
+      position: absolute;
+      left: 0;
+      top: 0;
+      overflow: visible;
+    }
+    .c05 .zone { fill: var(--accent-soft); }
+    .c05 .axis {
+      fill: none;
+      stroke: #b9b4c0;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .c05 .curve {
+      fill: none;
+      stroke-width: 10;
+      stroke-linecap: round;
+    }
+    .c05 .up { stroke: var(--accent); }
+    .c05 .down { stroke: var(--ink); }
+    .c05 .gap {
+      fill: none;
+      stroke: var(--coral);
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .c05 .lab {
+      position: absolute;
+      font-size: 52px;
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+    .c05 .lab.up-l { color: var(--accent); }
+    .c05 .lab.down-l { color: var(--ink); }
+    .c05 .ax {
+      position: absolute;
+      top: 876px;
+      font-size: 44px;
+      line-height: 1.1;
+      color: var(--muted);
+    }
+    .c05 .ax.mid {
+      font-weight: 600;
+      font-size: 48px;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+  </style>
+  <div id="root" data-composition-id="c05" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide c05">
+      <div class="pad">
+        <div class="kicker" id="c05-k">Das Paradox</div>
+        <div class="h2" id="c05-h">Wo er am meisten hilft, sehen wir am <em>wenigsten.</em></div>
+      </div>
+
+      <svg class="chart" width="1920" height="1080" viewBox="0 0 1920 1080" aria-hidden="true">
+        <rect class="zone" id="c05-zone" x="1060" y="400" width="320" height="440" rx="24" />
+        <path class="axis" id="c05-axis" pathLength="1" d="M200 840 H1386 M1366 826 L1388 840 L1366 854" />
+        <path class="curve down" id="c05-down" pathLength="1" d="M210 440 C 600 450 900 650 1340 790" />
+        <path class="curve up" id="c05-up" pathLength="1" d="M210 790 C 600 780 900 580 1340 440" />
+        <circle id="c05-dd" cx="1340" cy="790" r="14" fill="#292632" />
+        <circle id="c05-du" cx="1340" cy="440" r="14" fill="#6955c6" />
+        <!-- the gap: what it does vs. what we can check -->
+        <path class="gap" id="c05-gap" pathLength="1" d="M1270 486 V744 M1256 500 L1270 484 L1284 500 M1256 730 L1270 746 L1284 730" />
+      </svg>
+
+      <div class="lab up-l" id="c05-lu" style="left: 1400px; top: 408px">Hilfe der KI</div>
+      <div class="lab down-l" id="c05-ld" style="left: 1400px; top: 736px">Was wir<br />prüfen können</div>
+
+      <div class="ax" id="c05-a1" style="left: 200px">hoch</div>
+      <div class="ax mid" id="c05-a2" style="left: 593px; width: 400px; text-align: center">Unser Vorwissen</div>
+      <div class="ax" id="c05-a3" style="left: 1186px; width: 200px; text-align: right">niedrig</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var E = "power3.out";
+      function rise(tl, target, at, opts) {
+        tl.fromTo(target, { opacity: 0, y: opts && opts.y != null ? opts.y : 26 }, Object.assign({ opacity: 1, y: 0, duration: 0.42, ease: E }, opts || {}, { y: 0 }), at);
+      }
+      function draw(tl, target, at, dur, opts) {
+        tl.fromTo(target, { strokeDasharray: 1, strokeDashoffset: 1 }, Object.assign({ strokeDashoffset: 0, duration: dur, ease: "power2.inOut" }, opts || {}), at);
+      }
+
+      // C05 · Paradox — holds at 1.4 (the X) and 2.3 (the sentence)
+      var tl = gsap.timeline({ paused: true });
+      rise(tl, "#c05-k", 0, { y: 20 });
+      draw(tl, "#c05-axis", 0.1, 0.45);
+      rise(tl, ["#c05-a1", "#c05-a2", "#c05-a3"], 0.25, { stagger: 0.06 });
+      draw(tl, "#c05-up", 0.4, 0.7);
+      draw(tl, "#c05-down", 0.55, 0.7);
+      tl.fromTo("#c05-du", { opacity: 0, scale: 0, svgOrigin: "1340 440" }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)" }, 1.05);
+      tl.fromTo("#c05-dd", { opacity: 0, scale: 0, svgOrigin: "1340 790" }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)" }, 1.15);
+      rise(tl, "#c05-lu", 0.9);
+      rise(tl, "#c05-ld", 0.98);
+
+      // click: the low-knowledge zone, the gap, the sentence
+      tl.fromTo("#c05-zone", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "power1.out" }, 1.45);
+      draw(tl, "#c05-gap", 1.6, 0.35);
+      rise(tl, "#c05-h", 1.5, { y: 32, duration: 0.45 });
+      tl.set({}, {}, 2.8);
+      window.__timelines["c05"] = tl;
+    })();
+  </script>
+</template>

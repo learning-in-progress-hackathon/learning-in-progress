@@ -1,0 +1,210 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s06 .list {
+      position: absolute;
+      left: 170px;
+      top: 300px;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 34px;
+    }
+    .s06 .list li {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+      font-size: 72px;
+      font-weight: 600;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+    }
+    /* empty checkboxes: a wish list nobody can tick off */
+    .s06 .box {
+      flex: none;
+      width: 58px;
+      height: 58px;
+      border: 3px solid #ccc5e7;
+      border-radius: 14px;
+      background: #fff;
+    }
+    .s06 .brand { z-index: 3; }
+    .s06 .wall {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(23, 68px);
+      grid-auto-rows: 46px;
+      gap: 10px;
+      justify-content: center;
+      align-content: center;
+      transform-origin: 50% 50%;
+    }
+    .mini {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 5px 14px rgba(60, 53, 88, 0.08);
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow: hidden;
+    }
+    .mini b { display: block; height: 10px; border-radius: 4px; flex: none; }
+    .mini i { display: block; height: 4px; border-radius: 3px; background: #e1ded7; flex: none; }
+    .mini.row { flex-direction: row; }
+    .mini.row b { width: 30% !important; height: auto; }
+    .mini.row span { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .s06 .veil {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1400px;
+      height: 760px;
+      margin: -380px 0 0 -700px;
+      border-radius: 50%;
+      background: radial-gradient(closest-side, rgba(247, 245, 239, 0.92), rgba(247, 245, 239, 0.6) 60%, rgba(247, 245, 239, 0));
+    }
+    .s06 .counter {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 960px;
+      margin-left: -480px;
+      margin-top: -250px;
+      padding: 52px 40px 56px;
+      border-radius: 32px;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: 0 30px 90px rgba(60, 53, 88, 0.22);
+      text-align: center;
+    }
+    .s06 .counter .pre {
+      font-size: 52px;
+      font-weight: 500;
+      letter-spacing: -0.03em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    .s06 .counter .n {
+      font-size: 200px;
+      font-weight: 700;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+    .s06 .counter .l {
+      margin-top: 10px;
+      font-size: 88px;
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+    }
+  </style>
+  <div id="root" data-composition-id="s06" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide s06">
+      <div class="pad"><div class="kicker" id="s06-k">Was man bräuchte</div></div>
+      <ul class="list" id="s06-list">
+        <li id="s06-i1"><span class="box"></span>Persönliche, individuelle UIs</li>
+        <li id="s06-i2"><span class="box"></span>Exakt auf die Bedürfnisse zugeschnitten</li>
+        <li id="s06-i3"><span class="box"></span>In Echtzeit generiert</li>
+        <li id="s06-i4"><span class="box"></span>Fluide anpassbar</li>
+      </ul>
+      <div class="wall" id="s06-wall" aria-hidden="true"></div>
+      <div class="veil" id="s06-veil" aria-hidden="true"></div>
+      <div class="counter" id="s06-counter">
+        <div class="pre">Aber das wären ja …</div>
+        <div class="n" id="s06-n">1</div>
+        <div class="l"><em>UIs?!</em></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+    var E = "power3.out";
+
+    // Fade-and-rise entrance, the deck's default motion.
+    function rise(tl, target, at, opts) {
+      tl.fromTo(
+        target,
+        { opacity: 0, y: opts && opts.y != null ? opts.y : 40 },
+        Object.assign({ opacity: 1, y: 0, duration: 0.45, ease: E }, opts || {}, { y: 0 }),
+        at,
+      );
+    }
+
+    // Every slide's brand + kicker enter the same way.
+    function head(tl, id) {
+      rise(tl, "." + id + " .kicker", 0, { y: 20 });
+    }
+
+      
+
+    // S06 · Was man bräuchte — fragments at 1.6 (list) and 6.5 (wall of UIs)
+    (function () {
+      var tiles = ["t-plum", "t-blue", "t-mint", "t-peach", "t-lav", "t-yellow"];
+      var wall = document.getElementById("s06-wall");
+      var COLS = 23, ROWS = 15;
+      var CX = (COLS - 1) / 2, CY = (ROWS - 1) / 2;
+      var rings = [];
+      for (var i = 0; i < COLS * ROWS; i++) {
+        var h = (i * 2654435761) >>> 0;
+        var el = document.createElement("div");
+        var lines = 2 + (h % 3);
+        var top = '<b class="' + tiles[(h >>> 3) % tiles.length] + '" style="width:' + (40 + ((h >>> 7) % 55)) + '%"></b>';
+        var body = "";
+        for (var j = 0; j < lines; j++) body += '<i style="width:' + (45 + ((h >>> (9 + j * 4)) % 55)) + '%"></i>';
+        if ((h >>> 13) % 4 === 0) {
+          el.className = "mini row";
+          el.innerHTML = top + "<span>" + body + "</span>";
+        } else {
+          el.className = "mini";
+          el.innerHTML = top + body;
+        }
+        wall.appendChild(el);
+        var d = Math.max(Math.abs((i % COLS) - CX), Math.abs(Math.floor(i / COLS) - CY));
+        el._h = (h >>> 5) % 997;
+        (rings[d] = rings[d] || []).push(el);
+      }
+      // deterministic "scattered" order inside each ring
+      rings.forEach(function (ring) { ring.sort(function (a, b) { return a._h - b._h; }); });
+
+      var tl = gsap.timeline({ paused: true });
+      head(tl, "s06");
+      rise(tl, "#s06-i1", 0.1);
+      rise(tl, "#s06-i2", 0.2);
+      rise(tl, "#s06-i3", 0.3);
+      rise(tl, "#s06-i4", 0.4);
+      // click (1.0): the list steps back ...
+      tl.to(["#s06-list", "#s06-k"], { opacity: 0, y: -30, duration: 0.4, ease: "power2.in" }, 1.1);
+      // ... one big UI appears, the camera pulls back while rings of new UIs pop in
+      tl.fromTo("#s06-wall", { scale: 6 }, { scale: 1, duration: 3.4, ease: "power2.inOut" }, 2.0);
+      tl.fromTo(rings[0], { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.7, ease: "back.out(1.6)" }, 1.6);
+      var at = 2.4;
+      for (var r = 1; r < rings.length; r++) {
+        tl.fromTo(rings[r], { opacity: 0, scale: 0 }, {
+          opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.8)",
+          stagger: { each: Math.min(0.05, 0.3 / rings[r].length) },
+        }, at);
+        at += r < 3 ? 0.38 : 0.16;
+      }
+      // counter: 1 → 10.000, legible card over a soft veil
+      tl.fromTo("#s06-veil", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "power1.out" }, 3.7);
+      tl.fromTo("#s06-counter", { opacity: 0, scale: 0.85 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.6)" }, 3.7);
+      var n = { v: 1 };
+      var nEl = document.getElementById("s06-n");
+      tl.fromTo(n, { v: 1 }, {
+        v: 10000, duration: 1.8, ease: "power3.in",
+        onUpdate: function () { nEl.textContent = Math.round(n.v).toLocaleString("de-DE"); },
+      }, 3.9);
+      tl.set({}, {}, 6.5);
+      window.__timelines["s06"] = tl;
+    })();
+    })();
+  </script>
+</template>

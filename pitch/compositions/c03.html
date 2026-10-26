@@ -1,0 +1,134 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    /* Big before/after: Tage → 30 Min */
+    .c03 .race {
+      position: absolute;
+      left: 170px;
+      right: 170px;
+      top: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 70px;
+      font-size: 230px;
+      font-weight: 600;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .c03 .race .strike {
+      height: 0.07em;
+      margin-top: -0.02em;
+    }
+    .c03 .race em {
+      display: inline-block;
+      letter-spacing: -0.04em;
+    }
+    .c03 .arrow {
+      width: 220px;
+      height: 90px;
+      overflow: visible;
+    }
+    .c03 .arrow path {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    /* Follow-up facts as white cards */
+    .c03 .facts {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 560px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+    .c03 .card {
+      display: inline-flex;
+      align-items: center;
+      gap: 36px;
+      padding: 32px 60px 32px 40px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      box-shadow: var(--card-shadow);
+      font-size: 68px;
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .c03 .card .lbl {
+      color: var(--muted);
+    }
+    .c03 .card .ne {
+      color: var(--accent);
+    }
+    .c03 .ic {
+      flex: none;
+      width: 104px;
+      height: 104px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .c03 .ic svg {
+      width: 62px;
+      height: 62px;
+    }
+    .c03 .ic svg * {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+  </style>
+  <div id="root" data-composition-id="c03" data-width="1920" data-height="1080">
+    <div class="slide c03">
+      <div class="race">
+        <span class="strike-wrap" id="c03-tage"><span id="c03-tt">Tage</span><span class="strike" id="c03-x"></span></span>
+        <svg class="arrow" viewBox="0 0 220 90" aria-hidden="true"><path id="c03-ap" pathLength="1" d="M10 45 H 200 M 168 14 L 204 45 L 168 76"/></svg>
+        <em id="c03-min">30 Min</em>
+      </div>
+      <div class="facts">
+        <div class="card" id="c03-f1">
+          <span class="ic t-plum" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7 10l3 2.5L7 15M12.5 15H17"/></svg></span>
+          <span><span class="lbl">Code:</span> kaum eine Zeile selbst</span>
+        </div>
+        <div class="card" id="c03-f2">
+          <span class="ic t-peach" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="14" width="16" height="5" rx="1.5"/><rect x="5.5" y="8.5" width="13" height="5" rx="1.5"/><rect x="7" y="3" width="10" height="5" rx="1.5"/></svg></span>
+          <span>Menge <span class="ne">≠</span> Team</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var E = "power3.out";
+      // C03 · Tempo — holds at 1.2 (Tage → 30 Min), 1.9, 2.6
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo("#c03-tage", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 0);
+      tl.fromTo("#c03-x", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.inOut" }, 0.4);
+      tl.fromTo("#c03-tt", { opacity: 1 }, { opacity: 0.35, duration: 0.3, ease: "power1.out" }, 0.6);
+      tl.fromTo("#c03-ap", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDasharray: 1, strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 0.62);
+      tl.fromTo("#c03-min", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(2)" }, 0.75);
+      // click: Code
+      tl.fromTo("#c03-f1", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 1.3);
+      // click: Menge ≠ Team
+      tl.fromTo("#c03-f2", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 2.0);
+      tl.set({}, {}, 3);
+      window.__timelines["c03"] = tl;
+    })();
+  </script>
+</template>

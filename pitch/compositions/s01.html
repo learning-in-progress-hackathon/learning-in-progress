@@ -1,0 +1,86 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s01 .h1 { position: absolute; left: 170px; top: 270px; width: 1640px; font-size: 108px; line-height: 1.02; }
+    .bubble {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      gap: 18px;
+      padding: 26px 40px;
+      border-radius: 999px;
+      font-size: 48px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      box-shadow: 0 18px 44px rgba(60, 53, 88, 0.10);
+      will-change: transform, opacity;
+    }
+    .bubble::before {
+      content: "";
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.6;
+    }
+  </style>
+  <div id="root" data-composition-id="s01" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide s01">
+      <div class="pad"><div class="kicker" id="s01-k" data-var-text="s01-kicker">Bildung</div></div>
+      <h1 class="h1" id="s01-h">In einer Welt, in der viele wollen –<br>aber <em>nicht können.</em></h1>
+      <div class="bubble t-plum" id="s01-b1" style="left: 190px; top: 650px">Sprachbarrieren</div>
+      <div class="bubble t-mint" id="s01-b3" style="left: 800px; top: 600px">ADHS</div>
+      <div class="bubble t-peach" id="s01-b2" style="left: 470px; top: 800px">Körperliche Einschränkungen</div>
+      <div class="bubble t-blue" id="s01-b4" style="left: 1330px; top: 700px">Dyslexie</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+    var E = "power3.out";
+
+    // Fade-and-rise entrance, the deck's default motion.
+    function rise(tl, target, at, opts) {
+      tl.fromTo(
+        target,
+        { opacity: 0, y: opts && opts.y != null ? opts.y : 40 },
+        Object.assign({ opacity: 1, y: 0, duration: 0.45, ease: E }, opts || {}, { y: 0 }),
+        at,
+      );
+    }
+
+    // Every slide's brand + kicker enter the same way.
+    function head(tl, id) {
+      rise(tl, "." + id + " .kicker", 0, { y: 20 });
+    }
+
+      
+
+    // S01 · Bildung — holds at 0.8 (headline) and 3.0 (bubbles)
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      head(tl, "s01");
+      rise(tl, "#s01-h", 0.1, { y: 40, duration: 0.55 });
+      // Bubbles pop in after the click (hold 0.8 → 3.0): overshoot, settle, then a slow drift.
+      var B = [
+        { id: "#s01-b1", r: -4, at: 0.95, dy: -8 },
+        { id: "#s01-b3", r: 5, at: 1.1, dy: 7 },
+        { id: "#s01-b2", r: 2, at: 1.25, dy: -6 },
+        { id: "#s01-b4", r: -3, at: 1.4, dy: 8 },
+      ];
+      B.forEach(function (b) {
+        tl.fromTo(b.id,
+          { opacity: 0, scale: 0.2, y: 50, rotation: b.r * -3 },
+          { opacity: 1, scale: 1, y: 0, rotation: b.r, duration: 0.6, ease: "back.out(2.6)" },
+          b.at);
+        tl.fromTo(b.id, { y: 0 }, { y: b.dy, duration: 0.9, ease: "sine.inOut" }, b.at + 0.6);
+      });
+      tl.set({}, {}, 4);
+      window.__timelines["s01"] = tl;
+    })();
+    })();
+  </script>
+</template>

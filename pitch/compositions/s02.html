@@ -1,0 +1,180 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s02 .h2 { margin-top: 28px; font-size: 88px; }
+    .s02 .board {
+      position: absolute;
+      left: 170px;
+      top: 410px;
+      width: 840px;
+      height: 64px;
+      border-radius: 14px;
+      background: var(--ink);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .s02 .seat {
+      position: absolute;
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: #ebe8e1;
+      color: #a19da5;
+      display: grid;
+      place-items: center;
+    }
+    .s02 .seat svg { width: 44px; height: 44px; }
+    .s02 .chip {
+      position: absolute;
+      transform-origin: 50% 100%;
+      padding: 6px 22px 8px;
+      border-radius: 999px;
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      box-shadow: 0 12px 28px rgba(47, 40, 75, 0.14);
+      z-index: 2;
+    }
+    .s02 .roles {
+      position: absolute;
+      left: 1120px;
+      top: 410px;
+      width: 630px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .s02 .role {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: var(--card-shadow);
+      padding: 22px 30px 26px;
+    }
+    .s02 .role b {
+      display: block;
+      font-size: 46px;
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+    }
+    .s02 .role span {
+      display: block;
+      margin-top: 2px;
+      font-size: 40px;
+      color: var(--muted);
+      letter-spacing: -0.02em;
+    }
+    .s02 .meter {
+      margin-top: 16px;
+      height: 10px;
+      border-radius: 99px;
+      background: #e1ded5;
+      overflow: hidden;
+    }
+    .s02 .meter i {
+      display: block;
+      height: 100%;
+      border-radius: 99px;
+      background: #c4573a;
+      transform-origin: left center;
+    }
+  </style>
+  <div id="root" data-composition-id="s02" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide s02">
+      <div class="pad">
+        <div class="kicker" id="s02-k">Inklusion</div>
+        <div class="h2" id="s02-h">Gleicher Raum. Andere <em>Bedürfnisse.</em></div>
+      </div>
+      <div class="board" id="s02-board">Ein Unterricht für alle</div>
+      <div id="s02-seats" aria-hidden="true"></div>
+      <div class="chip t-plum" id="s02-c1">Sprachbarriere</div>
+      <div class="chip t-mint" id="s02-c2">ADHS</div>
+      <div class="chip t-blue" id="s02-c3">Dyslexie</div>
+      <div class="chip t-peach" id="s02-c4">Rollstuhl</div>
+      <div class="roles">
+        <div class="role" id="s02-r1"><b>Pädagog:innen</b><span>1 Person, 28 Bedürfnisse</span><div class="meter"><i></i></div></div>
+        <div class="role" id="s02-r2"><b>Erzieher:innen</b><span>Zu wenig Zeit für jede:n</span><div class="meter"><i></i></div></div>
+        <div class="role" id="s02-r3"><b>Institutionen</b><span>Verpflichtet, ohne Werkzeuge</span><div class="meter"><i></i></div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var E = "power3.out";
+      function rise(tl, target, at, opts) {
+        tl.fromTo(target, { opacity: 0, y: opts && opts.y != null ? opts.y : 28 }, Object.assign({ opacity: 1, y: 0, duration: 0.45, ease: E }, opts || {}, { y: 0 }), at);
+      }
+
+      // S02 · Inklusion — holds at 1.0 (one lesson for everyone), 2.6 (individuals struggle), 4.0 (overloaded roles)
+      var COLS = 7, ROWS = 4, X0 = 170, Y0 = 500, DX = 126, DY = 105;
+      var person = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/></svg>';
+      // struggling learners: [row, col, chip id, tile class, settle rotation, settle x, settle y]
+      var odd = [
+        [1, 1, "#s02-c1", "t-plum", -9, -10, 8],
+        [1, 5, "#s02-c2", "t-mint", 11, 12, -6],
+        [2, 2, "#s02-c3", "t-blue", -7, 8, 10],
+        [3, 4, "#s02-c4", "t-peach", 8, -12, 6],
+      ];
+      var host = document.getElementById("s02-seats");
+      var seats = [], oddSeats = [];
+      for (var r = 0; r < ROWS; r++) {
+        for (var c = 0; c < COLS; c++) {
+          var el = document.createElement("div");
+          el.className = "seat";
+          el.style.left = X0 + c * DX + "px";
+          el.style.top = Y0 + r * DY + "px";
+          el.innerHTML = person;
+          host.appendChild(el);
+          seats.push(el);
+          odd.forEach(function (o) { if (o[0] === r && o[1] === c) { o.el = el; oddSeats.push(el); } });
+        }
+      }
+      // chips sit above their learner
+      odd.forEach(function (o) {
+        var chip = document.querySelector(o[2]);
+        chip.style.left = X0 + o[1] * DX + 42 + "px";
+        chip.style.top = Y0 + o[0] * DY - 58 + "px";
+        o.chip = chip;
+      });
+
+      var tl = gsap.timeline({ paused: true });
+      rise(tl, ".s02 .kicker", 0, { y: 20 });
+      rise(tl, "#s02-h", 0.1, { y: 40, duration: 0.55 });
+      rise(tl, "#s02-board", 0.25, { y: 20, duration: 0.4 });
+      tl.fromTo(seats, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", stagger: { each: 0.012 } }, 0.3);
+
+      // click 1: individual learners stand out and struggle
+      odd.forEach(function (o, i) {
+        var at = 1.1 + i * 0.12;
+        var pal = { "t-plum": ["#e9e3fb", "#6955c6"], "t-mint": ["#e3f0e9", "#47735e"], "t-blue": ["#e3eef5", "#47718a"], "t-peach": ["#f8e7df", "#b2644f"] }[o[3]];
+        tl.fromTo(o.el, { backgroundColor: "#ebe8e1", color: "#a19da5", scale: 1 }, { backgroundColor: pal[0], color: pal[1], scale: 1.15, duration: 0.3, ease: "power2.out" }, at);
+        tl.fromTo(o.el, { rotation: 0, x: 0, y: 0 }, {
+          keyframes: { rotation: [0, o[4] * 1.6, -o[4], o[4]], x: [0, o[5] * 0.6, -o[5] * 0.4, o[5]], y: [0, o[6] * -0.5, o[6] * 0.6, o[6]] },
+          duration: 0.9, ease: "none",
+        }, at + 0.1);
+        tl.fromTo(o.chip, { opacity: 0, scale: 0.3, xPercent: -50, yPercent: 0 }, { opacity: 1, scale: 1, xPercent: -50, duration: 0.45, ease: "back.out(2.4)" }, at + 0.15);
+      });
+      // the rest of the class fades back a little
+      tl.fromTo(seats.filter(function (s) { return oddSeats.indexOf(s) < 0; }), { opacity: 1 }, { opacity: 0.55, duration: 0.4 }, 1.1);
+
+      // click 2: the people who are supposed to make it work are overloaded
+      ["#s02-r1", "#s02-r2", "#s02-r3"].forEach(function (id, i) {
+        tl.fromTo(id, { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.45, ease: E }, 2.7 + i * 0.15);
+        tl.fromTo(id + " .meter i", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power2.in" }, 2.95 + i * 0.15);
+        tl.fromTo(id, { rotation: 0 }, { keyframes: { rotation: [0, -1.2, 1, -0.6, 0] }, duration: 0.3, ease: "none" }, 3.55 + i * 0.1);
+      });
+      tl.set({}, {}, 5);
+      window.__timelines["s02"] = tl;
+    })();
+  </script>
+</template>

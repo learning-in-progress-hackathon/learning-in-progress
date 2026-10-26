@@ -1,0 +1,5 @@
+# HyperFrames working data (cache, previews, snapshots)
+.hyperframes/
+.thumbnails/
+.DS_Store
+node_modules/

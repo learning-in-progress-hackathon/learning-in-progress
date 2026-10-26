@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>MORPH — Pitch</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      /* Learning in Progress style guide (doc/design/STYLE_GUIDE.md) */
+      @font-face {
+        font-family: "DM Sans";
+        src: url("assets/fonts/dm-sans-latin-wght-normal.woff2") format("woff2");
+        font-weight: 100 1000;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Fraunces";
+        src: url("assets/fonts/fraunces-latin-wght-italic.woff2") format("woff2");
+        font-weight: 100 900;
+        font-style: italic;
+      }
+      @font-face {
+        font-family: "Caveat";
+        src: url("assets/fonts/caveat-latin-600-normal.woff2") format("woff2");
+        font-weight: 600;
+        font-style: normal;
+      }
+      :root {
+        --bg: #f7f5ef;
+        --ink: #292632;
+        --text: #1f1d2b;
+        --accent: #6955c6;
+        --accent-deep: #5540b0;
+        --accent-soft: #f0ecfb;
+        --coral: #e67f63;
+        --mint: #89b6a1;
+        --muted: #706b78;
+        --border: #e5e1d9;
+        --card-shadow: 0 24px 70px rgba(60, 53, 88, 0.08);
+        --font-sans: "DM Sans", sans-serif;
+        --font-serif: "Fraunces", serif;
+        --font-hand: "Caveat", cursive;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-sans);
+      }
+      #ground {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 50% 45%, #f0ecfb, transparent 46%), var(--bg);
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+      .pad {
+        position: absolute;
+        inset: 0;
+        padding: 150px 170px 120px;
+      }
+      em {
+        font-family: var(--font-serif);
+        font-style: italic;
+        font-weight: 600;
+        color: var(--accent);
+        letter-spacing: -0.03em;
+      }
+
+      /* Brand mark: three rounded bars */
+      .brand {
+        position: absolute;
+        left: 170px;
+        top: 64px;
+        display: flex;
+        align-items: flex-end;
+        gap: 14px;
+        font-weight: 700;
+        font-size: 30px;
+        letter-spacing: -0.02em;
+        color: #22202d;
+      }
+      .brand-mark {
+        display: flex;
+        align-items: flex-end;
+        gap: 3px;
+        transform: rotate(-8deg);
+        padding-bottom: 4px;
+      }
+      .brand-mark i {
+        display: block;
+        width: 10px;
+        border-radius: 8px;
+      }
+      .brand-mark i:nth-child(1) { height: 20px; background: #6955c6; }
+      .brand-mark i:nth-child(2) { height: 34px; background: #e67f63; }
+      .brand-mark i:nth-child(3) { height: 26px; background: #89b6a1; }
+
+      .kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 16px;
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 40px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .kicker::before {
+        content: "";
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--coral);
+      }
+      .h1 {
+        font-weight: 600;
+        font-size: 128px;
+        line-height: 0.95;
+        letter-spacing: -0.06em;
+        color: var(--ink);
+      }
+      .h2 {
+        font-weight: 600;
+        font-size: 96px;
+        line-height: 1.02;
+        letter-spacing: -0.05em;
+        color: var(--ink);
+      }
+      .lead {
+        font-size: 44px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+
+      /* Placeholder frame for content still to come */
+      .placeholder {
+        border: 3px dashed #c8c1dc;
+        border-radius: 28px;
+        background: rgba(247, 244, 253, 0.7);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        color: var(--accent);
+        text-align: center;
+      }
+      .placeholder b {
+        font-size: 48px;
+        font-weight: 600;
+        letter-spacing: -0.03em;
+      }
+      .placeholder span {
+        font-size: 40px;
+        color: #8c8891;
+      }
+
+      /* Strike line drawn across text */
+      .strike-wrap {
+        position: relative;
+        display: inline-block;
+      }
+      .strike {
+        position: absolute;
+        left: -3%;
+        right: -3%;
+        top: 50%;
+        height: 0.09em;
+        margin-top: -0.045em;
+        border-radius: 99px;
+        background: var(--coral);
+        transform-origin: left center;
+      }
+      /* Pastel tile pairs */
+      .t-plum { background: #e9e3fb; color: #6955c6; }
+      .t-blue { background: #e3eef5; color: #47718a; }
+      .t-mint { background: #e3f0e9; color: #47735e; }
+      .t-peach { background: #f8e7df; color: #b2644f; }
+      .t-lav { background: #eee8f7; color: #755899; }
+      .t-yellow { background: #f7efce; color: #8c742a; }
+
+      /* ---------- Demo slides (shared by s08–s11) ---------- */
+      .demo .kicker { position: absolute; left: 170px; top: 150px; }
+      .browser {
+        position: absolute;
+        left: 50%;
+        top: 250px;
+        width: 1280px;
+        height: 760px;
+        margin-left: -640px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 22px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+      }
+      .browser .bar {
+        height: 56px;
+        border-bottom: 1px solid #eeeae3;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 22px;
+        background: #fbfaf7;
+      }
+      .browser .bar i { width: 14px; height: 14px; border-radius: 50%; background: #e1ded5; }
+      .browser .placeholder {
+        position: absolute;
+        inset: 80px 24px 24px;
+      }    </style>
+  </head>
+  <body>
+    <script type="application/hyperframes-slideshow+json">
+      {
+        "slides": [
+          {
+            "sceneId": "c01",
+            "fragments": [
+              0.7,
+              1.6
+            ],
+            "notes": "Zum Start des Hackathons haben wir jemanden eingestellt. Einen Handwerker. [Klick] Schläft nie. Trinkt keinen Kaffee. Sagt zu allem: Klar, mach ich."
+          },
+          {
+            "sceneId": "c02",
+            "fragments": [
+              2.7,
+              3.5,
+              4.3,
+              5.1
+            ],
+            "notes": "Nach ein paar Stunden gab's ein Zeugnis: [Klick] Fleißig as shit. [Klick] Good listener – but lacks character. [Klick] Braucht kleinschrittige Anweisungen."
+          },
+          {
+            "sceneId": "c03",
+            "fragments": [
+              6.7,
+              7.4,
+              8.1
+            ],
+            "notes": "Und fleißig war er. ADHS-Studien: 30 Minuten statt Tagen. [Klick] Code: kaum eine Zeile selbst geschrieben. [Klick] Er hat die Menge verändert – nicht das Team."
+          },
+          {
+            "sceneId": "c04",
+            "fragments": [
+              9.7,
+              11.3
+            ],
+            "notes": "Den Bauplan haben wir gemacht. Die Idee war unsere. Aus der Recherche hat er Lernfragen abgeleitet – welche wir nehmen, haben wir entschieden. [Klick] Die Regel: Ein Zimmer darf er allein bauen. Den Turm nur unter Aufsicht."
+          },
+          {
+            "sceneId": "c05",
+            "fragments": [
+              13.1,
+              14.0
+            ],
+            "notes": "Was uns erschreckt hat: Am meisten geholfen hat er dort, wo wir am wenigsten wussten. [Klick] Genau da konnten wir seine Arbeit am schlechtesten prüfen."
+          },
+          {
+            "sceneId": "c06",
+            "fragments": [
+              15.5,
+              16.5,
+              17.4
+            ],
+            "notes": "Wir sind multikulturell, also reden wir Englisch. Einer fragt den Agenten höflich: Can you install the web UI? Gemeint: Ginge das? Verstanden: Mach. [Klick] Und er hat gemacht. Seitdem fragt ihn keiner mehr nach Sicherheitslücken. [Klick] Wir haben künstliche Intelligenz. Und kulturelle. Nur die zweite hört, wann Can you eine Frage ist."
+          },
+          {
+            "sceneId": "c07",
+            "fragments": [
+              22.4,
+              23.3
+            ],
+            "notes": "Irgendwann wird's zu viel. Viele Köpfe, viele Baustellen, ein Handwerker, der schneller baut, als wir denken. [Klick] Für uns ist das ein Hackathon. Für Menschen mit ADHS jeder Lerntag."
+          },
+          {
+            "sceneId": "s01",
+            "fragments": [
+              24.5,
+              26.7
+            ],
+            "notes": "Wir müssen Leuten nicht Wissen aufzwingen. Es gibt so viele, die wollen, aber nicht können. [Klick]"
+          },
+          {
+            "sceneId": "s02",
+            "fragments": [
+              28.7,
+              30.3,
+              31.8
+            ],
+            "notes": "Inklusion hat die richtige Absicht. [Klick] In der Praxis kann es dazu führen, dass Menschen in einem Umfeld lernen, das nicht für sie ausgerichtet ist. [Klick] Pädagog:innen, Erzieher:innen und Institutionen sind verpflichtet, Inhalte zu individualisieren. Und in klassischer deutscher Manier gibt es dafür einen Begriff:"
+          },
+          {
+            "sceneId": "s03",
+            "fragments": [
+              34.0
+            ],
+            "notes": "Binnendifferenzierung."
+          },
+          {
+            "sceneId": "s04",
+            "fragments": [
+              35.7,
+              37.5
+            ],
+            "notes": "Das Problem ist: [Klick] Wenn zu wenige Menschen ein Problem haben, ist das kommerzielle Interesse zu gering, eine Lösung für wenige zu schaffen."
+          },
+          {
+            "sceneId": "s05",
+            "fragments": [
+              39.0,
+              40.4
+            ],
+            "notes": "In einer idealen Welt: Anstatt einer UI für alle [Klick] bräuchte man eine UI für jeden einzeln."
+          },
+          {
+            "sceneId": "s06",
+            "fragments": [
+              42.2,
+              47.1
+            ],
+            "notes": "Was man bräuchte: Persönliche, individuelle UIs. Exakt auf die Bedürfnisse zugeschnitten. In Echtzeit generiert. Fluide anpassbar. [Klick] Aber das wären ja … 10.000 UIs?!"
+          },
+          {
+            "sceneId": "s07",
+            "fragments": [
+              49.75
+            ],
+            "notes": "Gestatten, MORPH. Schauen wir es uns mal an."
+          },
+          {
+            "sceneId": "s08",
+            "fragments": [
+              52.1,
+              56.1,
+              59.6,
+              62.7
+            ],
+            "notes": "Peter öffnet MORPH. [Klick] Er sagt, wer er ist: Peter, 10. Klasse, mag Minecraft. [Klick] Sein Ziel: Hausaufgaben in unter 45 Minuten. Er lädt sein Biologie-Material zur Photosynthese hoch. [Klick] Und er beschreibt, was schwer ist: Er hat ADHS, kommt nicht ins Anfangen und verliert nach einer Seite Text den Faden."
+          },
+          {
+            "sceneId": "s09",
+            "fragments": [
+              65.7,
+              67.4,
+              70.9
+            ],
+            "notes": "MORPH fragt nach – mit Karten, die auf einer wissenschaftlichen Lern-Skala beruhen: dein Lerntyp, wissenschaftsbasiert. Und mit eigenen Fragen, die die KI für Peter formuliert. [Klick] Dann fasst MORPH zusammen, was es verstanden hat. [Klick] Aus Lehrplan, Peters Angaben und seinen Antworten entsteht sein AI Twin: Bedürfnisse, Stärken, Interessen und Ziel."
+          },
+          {
+            "sceneId": "s11",
+            "fragments": [
+              72.4,
+              76.6,
+              80.5,
+              82.1
+            ],
+            "notes": "Peter klickt auf „Lösung öffnen“. [Klick] MORPH verwandelt sein Material und den gewählten Ansatz in eine echte, personalisierte Lernseite. [Klick] Statt einer Textseite ein Labor: mehr Licht, mehr Zucker. Und direkt eine Frage mit Feedback. [Klick] Fertig – für Peter gemacht."
+          },
+          {
+            "sceneId": "s12",
+            "fragments": [
+              83.55
+            ],
+            "notes": "Egal wie individuell die Anforderungen sind: MORPH liefert. Durch Generierung on the fly ist alles möglich, was dich beim Lernen unterstützt. MORPH generiert nicht nur eine personalisierte UI — es erfindet ganz neue Wege, mit Wissen zu interagieren, mit allem, was dir zur Verfügung steht."
+          },
+          {
+            "sceneId": "s13",
+            "fragments": [
+              84.7,
+              85.9,
+              86.7,
+              87.4,
+              88.4,
+              89.5
+            ],
+            "notes": "MORPH ist viel, aber auch vieles nicht. [Klick] DOTS → NOTS. [Klick] DSGVOh Yeah! [Klick] BIAS — [Klick] nein: SCIENCE. Wir nutzen Studien, um zu beurteilen, was die einzelnen Nutzer:innen für ihre Bedürfnisse brauchen. — Zeit für eine Live-Demo. Wir haben Live-Transkription mitlaufen lassen. MORPH, mach die letzte Slide. — handy: take a look at the github and insert a team slide"
+          },
+          {
+            "sceneId": "s14",
+            "fragments": [
+              93.7
+            ],
+            "notes": "[Generierungs-Animation läuft] … generating a final slide …"
+          },
+          {
+            "sceneId": "s15",
+            "fragments": [
+              95.6
+            ],
+            "notes": "Das sind wir: Jai, Jens, Simon, Chirag, Kai, Tobi, Nils, Abdu, Ammar, Halit — und eine KI."
+          },
+          {
+            "sceneId": "s16",
+            "fragments": [
+              96.8
+            ],
+            "notes": "One more thing."
+          },
+          {
+            "sceneId": "s17",
+            "fragments": [
+              98.3,
+              100.7
+            ],
+            "notes": "Wir sind live und funktional. [Klick] Auf dieser Domain: binnendifferenzierung.online"
+          }
+        ]
+      }
+    </script>
+
+    <div id="root" data-composition-id="main" data-start="0" data-duration="101.1" data-width="1920" data-height="1080">
+      <div id="ground" aria-hidden="true"></div>
+      <div id="c01" class="clip" data-composition-id="c01" data-composition-src="compositions/c01.html" data-label="Stellenanzeige" data-start="0" data-duration="2" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="c02" class="clip" data-composition-id="c02" data-composition-src="compositions/c02.html" data-label="Arbeitszeugnis" data-start="2" data-duration="3.5" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="c03" class="clip" data-composition-id="c03" data-composition-src="compositions/c03.html" data-label="Tempo" data-start="5.5" data-duration="3" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="c04" class="clip" data-composition-id="c04" data-composition-src="compositions/c04.html" data-label="Bauplan" data-start="8.5" data-duration="3.2" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="c05" class="clip" data-composition-id="c05" data-composition-src="compositions/c05.html" data-label="Paradox" data-start="11.7" data-duration="2.8" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="c06" class="clip" data-composition-id="c06" data-composition-src="compositions/c06.html" data-label="Can you…?" data-start="14.5" data-duration="3.4" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="c07" class="clip" data-composition-id="c07" data-composition-src="compositions/c07.html" data-label="Überforderung" data-start="17.9" data-duration="5.8" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s01" class="clip" data-composition-id="s01" data-composition-src="compositions/s01.html" data-label="Bildung" data-start="23.7" data-duration="4" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s02" class="clip" data-composition-id="s02" data-composition-src="compositions/s02.html" data-label="Inklusion" data-start="27.7" data-duration="5" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s03" class="clip" data-composition-id="s03" data-composition-src="compositions/s03.html" data-label="Binnendifferenzierung" data-start="32.7" data-duration="2" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s04" class="clip" data-composition-id="s04" data-composition-src="compositions/s04.html" data-label="Das lohnt sich nicht" data-start="34.7" data-duration="3.5" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s05" class="clip" data-composition-id="s05" data-composition-src="compositions/s05.html" data-label="In einer idealen Welt" data-start="38.2" data-duration="3" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s06" class="clip" data-composition-id="s06" data-composition-src="compositions/s06.html" data-label="Was man bräuchte" data-start="41.2" data-duration="6.5" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s07" class="clip" data-composition-id="s07" data-composition-src="compositions/s07.html" data-label="Gestatten, MORPH" data-start="47.7" data-duration="3" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s08" class="clip" data-composition-id="s08" data-composition-src="compositions/s08.html" data-label="Ankommen" data-start="50.7" data-duration="12.5" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s09" class="clip" data-composition-id="s09" data-composition-src="compositions/s09.html" data-label="Verstehen" data-start="63.2" data-duration="8" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s11" class="clip" data-composition-id="s11" data-composition-src="compositions/s11.html" data-label="Erschaffen" data-start="71.2" data-duration="11.39" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s12" class="clip" data-composition-id="s12" data-composition-src="compositions/s12.html" data-label="AI is the limit" data-start="82.6" data-duration="1.5" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s13" class="clip" data-composition-id="s13" data-composition-src="compositions/s13.html" data-label="Was MORPH nicht ist" data-start="84.1" data-duration="6" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s14" class="clip" data-composition-id="s14" data-composition-src="compositions/s14.html" data-label="Generating" data-start="90.1" data-duration="4" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s15" class="clip" data-composition-id="s15" data-composition-src="compositions/s15.html" data-label="Team" data-start="94.1" data-duration="2" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s16" class="clip" data-composition-id="s16" data-composition-src="compositions/s16.html" data-label="One more thing" data-start="96.1" data-duration="1.5" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+      <div id="s17" class="clip" data-composition-id="s17" data-composition-src="compositions/s17.html" data-label="Wir sind live" data-start="97.6" data-duration="3.5" data-width="1920" data-height="1080" data-track-index="1" data-track-kind="graphics"></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      tl.set({}, {}, 101.1);
+      window.__timelines["main"] = tl;
+    </script>
+
+    <!--
+      Presenter navigation. The slideshow navigates by seeking, which jumps straight
+      to each hold. Only when this deck runs inside <hyperframes-slideshow>
+      (hyperframes present) do we adjust two things on its controller:
+      - Moving forward plays the authored motion up to the next hold, starting from
+        wherever the playhead is, so an early click continues instead of breaking.
+      - Back steps exactly one hold back (into the previous slide's last step).
+      Studio, check, snapshot and render never take this path.
+    -->
+    <script>
+      (function () {
+        var host = null;
+        try {
+          host = window.parent !== window && window.parent.document.querySelector("hyperframes-slideshow");
+        } catch (e) {}
+        if (!host) return;
+
+        function patch(c) {
+          if (!c || c.__morphNav) return;
+          c.__morphNav = true;
+          var seek = c.playTo.bind(c);
+          var origPrev = c.prev.bind(c);
+          var proxy = { t: 0 };
+          var anim = null;
+          var current = null;
+          var backward = false;
+          // prefers-reduced-motion: jump straight to each step instead of playing it
+          var reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+          c.playTo = function (t) {
+            if (anim) anim.kill();
+            anim = null;
+            var slide = c.currentSlide;
+            var from = null;
+            if (!backward && slide && current !== null && !document.hidden && !reduced.matches) {
+              if (current >= slide.start && current < t) from = current; // same slide: continue from here
+              else if (current < slide.start) from = slide.start; // next slide: play its entrance
+            }
+            if (from === null || t - from < 0.02) {
+              current = t;
+              seek(t);
+              return;
+            }
+            proxy.t = current = from;
+            seek(from);
+            anim = gsap.to(proxy, {
+              t: t,
+              duration: t - from,
+              ease: "none",
+              onUpdate: function () {
+                current = proxy.t;
+                seek(proxy.t);
+              },
+              onComplete: function () {
+                anim = null;
+                current = t;
+                seek(t);
+              },
+            });
+          };
+
+          c.prev = function () {
+            backward = true;
+            try {
+              var f = c.frame;
+              var slide = c.currentSlide;
+              if (slide && f.fragmentIndex > 0) {
+                f.fragmentIndex -= 1;
+                c.playTo(slide.fragments[f.fragmentIndex]);
+                c.emitChange();
+                return;
+              }
+              if (f.slideIndex > 0) {
+                var prevSlide = c.slidesOf(f.sequenceId)[f.slideIndex - 1];
+                c.stopSlideMedia();
+                c.resumeSlide(f.slideIndex - 1, prevSlide.fragments.length ? prevSlide.fragments.length - 1 : -1);
+                return;
+              }
+              origPrev();
+            } finally {
+              backward = false;
+            }
+          };
+        }
+
+        // The controller is created once the player is ready (and again on reload).
+        gsap.ticker.add(function () {
+          patch(host.controller);
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,131 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    /* The reference letter: a white sheet with faint placeholder lines */
+    .c02 .sheet {
+      position: absolute;
+      left: 50%;
+      top: 90px;
+      width: 1240px;
+      height: 920px;
+      margin-left: -620px;
+      padding: 80px 96px 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--card-shadow);
+    }
+    .c02 .head {
+      font-size: 76px;
+      font-weight: 600;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .c02 .rule {
+      margin: 30px 0 38px;
+      height: 2px;
+      background: var(--border);
+    }
+    .c02 .ln {
+      height: 16px;
+      border-radius: 99px;
+      background: #eeebe4;
+      margin-bottom: 26px;
+    }
+    .c02 .q {
+      position: relative;
+      display: inline-block;
+      margin: 8px 0 34px -14px;
+      padding: 4px 14px 10px;
+      font-size: 56px;
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      line-height: 1.1;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    /* Highlighter stroke behind each quote, swept left to right */
+    .c02 .mk {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 12%;
+      bottom: 4%;
+      border-radius: 10px 18px 12px 20px;
+      background: #f3e3a0;
+      transform-origin: left center;
+    }
+    .c02 .tx {
+      position: relative;
+      display: inline-block;
+    }
+    .c02 .sig {
+      position: absolute;
+      right: 110px;
+      bottom: 70px;
+      width: 300px;
+      height: 90px;
+    }
+    .c02 .sig path {
+      fill: none;
+      stroke: #bdb7c8;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .c02 .sigline {
+      position: absolute;
+      right: 96px;
+      bottom: 70px;
+      width: 330px;
+      height: 2px;
+      background: var(--border);
+    }
+  </style>
+  <div id="root" data-composition-id="c02" data-width="1920" data-height="1080">
+    <div class="slide c02">
+      <div class="sheet" id="c02-sheet">
+        <div class="head" id="c02-h">Arbeitszeugnis</div>
+        <div class="rule"></div>
+        <div class="ln" style="width: 92%"></div>
+        <div class="ln" style="width: 70%"></div>
+        <div class="q" id="c02-q1"><span class="mk" id="c02-m1"></span><span class="tx" id="c02-t1">Fleißig as shit.</span></div>
+        <div class="ln" style="width: 84%"></div>
+        <div class="q" id="c02-q2"><span class="mk" id="c02-m2"></span><span class="tx" id="c02-t2">Good listener – but lacks character.</span></div>
+        <div class="ln" style="width: 64%"></div>
+        <div class="q" id="c02-q3"><span class="mk" id="c02-m3"></span><span class="tx" id="c02-t3">Braucht kleinschrittige Anweisungen.</span></div>
+        <div class="sigline" aria-hidden="true"></div>
+        <svg class="sig" viewBox="0 0 300 90" aria-hidden="true"><path d="M14 66 C 30 20, 46 18, 44 52 C 42 78, 60 70, 74 44 C 86 24, 96 30, 98 56 C 110 36, 126 34, 134 54 C 150 30, 176 40, 190 52 C 214 44, 250 40, 286 30"/></svg>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var E = "power3.out";
+      // C02 · Arbeitszeugnis — holds at 0.7 (sheet), 1.5, 2.3, 3.1 (one quote per click)
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo("#c02-sheet", { opacity: 0, y: 50, rotation: 0 }, { opacity: 1, y: 0, rotation: -1, duration: 0.5, ease: E }, 0);
+      tl.fromTo("#c02-h", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 0.15);
+
+      // Each quote: marker sweeps left→right, the words are revealed right behind it
+      function mark(n, at) {
+        tl.fromTo("#c02-m" + n, { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power2.inOut" }, at);
+        tl.fromTo(
+          "#c02-t" + n,
+          { opacity: 0, clipPath: "inset(0% 100% 0% 0%)" },
+          { opacity: 1, clipPath: "inset(0% 0% 0% 0%)", duration: 0.4, ease: "power2.inOut" },
+          at + 0.04,
+        );
+      }
+      mark(1, 0.8);
+      mark(2, 1.6);
+      mark(3, 2.4);
+      tl.set({}, {}, 3.5);
+      window.__timelines["c02"] = tl;
+    })();
+  </script>
+</template>

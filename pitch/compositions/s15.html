@@ -1,0 +1,91 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s15 .h2 { margin-top: 24px; font-size: 96px; }
+    .s15 .team {
+      position: absolute;
+      left: 170px;
+      right: 170px;
+      top: 400px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      column-gap: 46px;
+      row-gap: 34px;
+    }
+    .s15 .m {
+      width: 210px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .s15 .av {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      box-shadow: 0 0 0 6px #fff, 0 15px 35px rgba(47, 40, 75, 0.12);
+    }
+    .s15 .m b {
+      font-size: 42px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+    .s15 .ai .av {
+      background: linear-gradient(145deg, #806bd9, #5743ae);
+      color: #fff;
+      box-shadow: 0 0 0 6px #fff, 0 25px 60px rgba(73, 55, 154, 0.32);
+    }
+    .s15 .ai .av svg { width: 70px; height: 70px; }
+    .s15 .ai b { color: var(--accent); }
+  </style>
+  <div id="root" data-composition-id="s15" data-width="1920" data-height="1080">
+    <div class="slide s15">
+      <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span>morph</div>
+      <div class="pad">
+        <div class="kicker" id="s15-k">Team</div>
+        <div class="h2" id="s15-h">10 Menschen. 1 <em>KI.</em></div>
+      </div>
+      <div class="team" id="s15-team">
+        <div class="m"><div class="av t-plum">J</div><b>Jai</b></div>
+        <div class="m"><div class="av t-blue">J</div><b>Jens</b></div>
+        <div class="m"><div class="av t-mint">S</div><b>Simon</b></div>
+        <div class="m"><div class="av t-peach">C</div><b>Chirag</b></div>
+        <div class="m"><div class="av t-lav">K</div><b>Kai</b></div>
+        <div class="m"><div class="av t-yellow">T</div><b>Tobi</b></div>
+        <div class="m"><div class="av t-plum">N</div><b>Nils</b></div>
+        <div class="m"><div class="av t-blue">A</div><b>Abdu</b></div>
+        <div class="m"><div class="av t-mint">A</div><b>Ammar</b></div>
+        <div class="m"><div class="av t-peach">H</div><b>Halit</b></div>
+        <div class="m ai" id="s15-ai"><div class="av"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2Z"/></svg></div><b>+ AI</b></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var E = "power3.out";
+      function rise(tl, target, at, opts) {
+        tl.fromTo(target, { opacity: 0, y: opts && opts.y != null ? opts.y : 28 }, Object.assign({ opacity: 1, y: 0, duration: 0.45, ease: E }, opts || {}, { y: 0 }), at);
+      }
+
+      // S15 · Team — hold at 1.5
+      var tl = gsap.timeline({ paused: true });
+      rise(tl, ".s15 .brand", 0, { y: 0, duration: 0.3 });
+      rise(tl, "#s15-k", 0, { y: 20 });
+      rise(tl, "#s15-h", 0.05, { y: 40, duration: 0.5 });
+      tl.fromTo(".s15 .m:not(.ai)", { opacity: 0, scale: 0.4, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: "back.out(2.2)", stagger: 0.05 }, 0.2);
+      tl.fromTo("#s15-ai", { opacity: 0, scale: 0.3, rotation: -20 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.55, ease: "back.out(2.6)" }, 0.85);
+      tl.set({}, {}, 2);
+      window.__timelines["s15"] = tl;
+    })();
+  </script>
+</template>

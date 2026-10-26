@@ -1,0 +1,37 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s16 .center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .s16 .omt {
+      font-size: 190px;
+      font-weight: 600;
+      letter-spacing: -0.06em;
+      color: var(--ink);
+    }
+  </style>
+  <div id="root" data-composition-id="s16" data-width="1920" data-height="1080">
+    <div class="slide s16">
+      <div class="center">
+        <div class="omt" id="s16-omt">One more <em>thing.</em></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      // S16 · One more thing — hold at 0.7
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo("#s16-omt", { opacity: 0, y: 40, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "power3.out" }, 0.05);
+      tl.set({}, {}, 1.5);
+      window.__timelines["s16"] = tl;
+    })();
+  </script>
+</template>

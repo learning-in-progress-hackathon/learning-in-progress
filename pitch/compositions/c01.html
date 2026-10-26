@@ -1,0 +1,111 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .c01 .note {
+      position: absolute;
+      left: 50%;
+      top: 150px;
+      width: 1000px;
+      height: 760px;
+      margin-left: -500px;
+      background: #fff;
+      border: 22px solid #f3e3a0;
+      border-radius: 10px;
+      box-shadow: 0 30px 80px rgba(60, 53, 88, 0.14);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .c01 .pin {
+      position: absolute;
+      left: 50%;
+      top: -48px;
+      width: 52px;
+      height: 52px;
+      margin-left: -26px;
+      border-radius: 50%;
+      background: #e67f63;
+      box-shadow: 0 8px 16px rgba(47, 40, 75, 0.25), inset -6px -6px 0 rgba(0, 0, 0, 0.12);
+    }
+    .c01 .label {
+      font-size: 64px;
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      color: var(--muted);
+    }
+    .c01 .title {
+      margin-top: 6px;
+      font-size: 150px;
+      font-weight: 600;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      color: var(--ink);
+    }
+    /* tear-off strips along the bottom of the notice */
+    .c01 .strips {
+      position: absolute;
+      left: 40px;
+      right: 40px;
+      bottom: -22px;
+      height: 130px;
+      display: flex;
+      gap: 14px;
+    }
+    .c01 .strips i {
+      flex: 1;
+      border: 2px dashed #d9d5cc;
+      border-bottom: 0;
+      border-radius: 6px 6px 0 0;
+      background: repeating-linear-gradient(90deg, transparent 0 46%, #e1ded7 46% 54%, transparent 54% 100%);
+    }
+    /* Auto-width stamp, parked on the lower-right edge of the notice so the
+       headline stays readable */
+    .c01 .stamp {
+      position: absolute;
+      left: 1010px;
+      top: 770px;
+      white-space: nowrap;
+      padding: 14px 44px 18px;
+      border: 9px solid #c4573a;
+      border-radius: 18px;
+      color: #c4573a;
+      font-size: 84px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 14px 36px rgba(60, 53, 88, 0.12);
+    }
+  </style>
+  <div id="root" data-composition-id="c01" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide c01">
+      <div class="note" id="c01-note">
+        <div class="pin" aria-hidden="true"></div>
+        <div class="label" id="c01-l">Gesucht:</div>
+        <div class="title" id="c01-t"><em>Handwerker.</em></div>
+        <div class="strips" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="stamp" id="c01-stamp">Eingestellt</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var E = "power3.out";
+      // C01 · Stellenanzeige — holds at 0.7 (the notice) and 1.6 (stamped)
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo("#c01-note", { opacity: 0, y: 50, rotation: 0 }, { opacity: 1, y: 0, rotation: -2, duration: 0.5, ease: E }, 0);
+      tl.fromTo(["#c01-l", "#c01-t"], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: E, stagger: 0.08 }, 0.15);
+      // click: the stamp lands, the notice gives a little
+      tl.fromTo("#c01-stamp", { opacity: 0, scale: 2.4, rotation: -2 }, { opacity: 1, scale: 1, rotation: -8, duration: 0.32, ease: "power3.in" }, 0.8);
+      tl.fromTo("#c01-note", { y: 0 }, { keyframes: { y: [0, 10, -4, 0] }, duration: 0.3, ease: "none", immediateRender: false }, 1.12);
+      tl.set({}, {}, 2);
+      window.__timelines["c01"] = tl;
+    })();
+  </script>
+</template>

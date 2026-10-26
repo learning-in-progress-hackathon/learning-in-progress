@@ -1,0 +1,139 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s07 .center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .s07 .blob {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 900px;
+      height: 900px;
+      margin: -450px 0 0 -450px;
+      background: #dfd8f6;
+      border-radius: 43% 57% 62% 38% / 46% 38% 62% 54%;
+    }
+    .s07 .orbit {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      border: 2px solid #ccc5e7;
+      border-radius: 50%;
+    }
+    .s07 .hello {
+      position: relative;
+      font-size: 88px;
+      font-weight: 600;
+      letter-spacing: -0.05em;
+      color: var(--ink);
+    }
+    .s07 .name {
+      position: relative;
+      display: flex;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 600;
+      font-size: 330px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--accent);
+    }
+    .s07 .name span { display: inline-block; transform-origin: 50% 80%; }
+    .s07 .stack {
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .s07 .stack > * { grid-area: 1 / 1; }
+    .s07 .word {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      gap: 22px;
+      font-weight: 700;
+      font-size: 150px;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+    .s07 .word .brand-mark { gap: 8px; padding-bottom: 22px; }
+    .s07 .word .brand-mark i { width: 26px; border-radius: 20px; }
+    .s07 .word .brand-mark i:nth-child(1) { height: 52px; }
+    .s07 .word .brand-mark i:nth-child(2) { height: 88px; }
+    .s07 .word .brand-mark i:nth-child(3) { height: 68px; }
+    .s07 .dot {
+      position: absolute;
+      border-radius: 50%;
+    }
+  </style>
+  <div id="root" data-composition-id="s07" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide s07">
+      <div class="blob" id="s07-blob" aria-hidden="true"></div>
+      <div class="orbit" id="s07-o1" aria-hidden="true" style="width: 1300px; height: 620px; margin: -310px 0 0 -650px; rotate: -16deg"></div>
+      <div class="orbit" id="s07-o2" aria-hidden="true" data-layout-allow-overflow style="width: 1500px; height: 760px; margin: -380px 0 0 -750px; rotate: 21deg"></div>
+      <div class="dot" id="s07-d1" aria-hidden="true" style="left: 1420px; top: 250px; width: 34px; height: 34px; background: var(--coral)"></div>
+      <div class="dot" id="s07-d2" aria-hidden="true" style="left: 470px; top: 790px; width: 24px; height: 24px; background: var(--mint)"></div>
+      <div class="center">
+        <div class="hello" id="s07-h">Gestatten,</div>
+        <div class="stack">
+          <div class="word" id="s07-word"><span class="brand-mark"><i></i><i></i><i></i></span>morph</div>
+          <div class="name" id="s07-name"><span>M</span><span>O</span><span>R</span><span>P</span><span>H</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+    var E = "power3.out";
+
+    // Fade-and-rise entrance, the deck's default motion.
+    function rise(tl, target, at, opts) {
+      tl.fromTo(
+        target,
+        { opacity: 0, y: opts && opts.y != null ? opts.y : 40 },
+        Object.assign({ opacity: 1, y: 0, duration: 0.7, ease: E }, opts || {}, { y: 0 }),
+        at,
+      );
+    }
+
+    // Every slide's brand + kicker enter the same way.
+    function head(tl, id) {
+      rise(tl, "." + id + " .brand", 0, { y: 0, duration: 0.5 });
+      rise(tl, "." + id + " .kicker", 0.1);
+    }
+
+      
+
+    // S07 · Gestatten, MORPH — rest at 2.0
+    // The small brand wordmark melts (blur + stretch) into the big serif MORPH.
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      tl.fromTo("#s07-blob", { opacity: 0, scale: 0.6, rotate: -10 }, { opacity: 1, scale: 1, rotate: 0, duration: 1.2, ease: E }, 0);
+      tl.fromTo("#s07-blob",
+        { borderRadius: "43% 57% 62% 38% / 46% 38% 62% 54%" },
+        { borderRadius: "54% 46% 42% 58% / 50% 56% 44% 50%", duration: 1.7, ease: "sine.inOut" }, 0.3);
+      tl.fromTo(["#s07-o1", "#s07-o2"], { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 1.2, ease: E, stagger: 0.15 }, 0.2);
+      rise(tl, "#s07-h", 0.2);
+      // 1. the familiar wordmark arrives ...
+      tl.fromTo("#s07-word", { opacity: 0, scale: 0.8, filter: "blur(0px)" }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 0.35);
+      // 2. ... and melts away
+      tl.to("#s07-word", { opacity: 0, scaleX: 1.5, scaleY: 0.7, filter: "blur(18px)", duration: 0.5, ease: "power2.in" }, 0.95);
+      // 3. MORPH condenses out of the blur, letter by letter, with a squash and settle
+      tl.fromTo("#s07-name span",
+        { opacity: 0, scaleX: 1.7, scaleY: 0.45, skewX: -14, y: 30, filter: "blur(22px)" },
+        { opacity: 1, scaleX: 1, scaleY: 1, skewX: 0, y: 0, filter: "blur(0px)", duration: 0.7, ease: "back.out(1.7)", stagger: 0.06 }, 1.05);
+      tl.fromTo(["#s07-d1", "#s07-d2"], { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2.4)", stagger: 0.12 }, 1.35);
+      tl.set({}, {}, 4);
+      window.__timelines["s07"] = tl;
+    })();
+    })();
+  </script>
+</template>

@@ -1,0 +1,480 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s11 .side { position: absolute; left: 170px; top: 150px; width: 330px; }
+    .s11 .cap {
+      position: absolute;
+      left: 170px;
+      top: 250px;
+      width: 330px;
+      font-size: 50px;
+      font-weight: 600;
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+    .s11 .win {
+      position: absolute;
+      left: 540px;
+      top: 150px;
+      width: 1210px;
+      height: 800px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 30px 80px rgba(60, 53, 88, 0.16);
+      overflow: hidden;
+    }
+    .s11 .bar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 0 18px;
+      background: #fbfaf7;
+      border-bottom: 1px solid #eeeae3;
+    }
+    .s11 .bar i { width: 12px; height: 12px; border-radius: 50%; background: #e1ded5; }
+    .s11 .bar span { margin-left: 18px; padding: 4px 16px; border-radius: 999px; background: #f0ede7; color: #5f5a66; font-size: 17px; }
+    .s11 .vp { position: absolute; left: 0; top: 44px; width: 1210px; height: 756px; overflow: hidden; background: #f7f5ef; }
+    .s11 .cam { position: absolute; left: 0; top: 0; width: 2160px; height: 1350px; }
+    .s11 .shot { position: absolute; left: 0; top: 0; width: 2160px; height: 1350px; }
+    .s11 .cursor { position: absolute; left: 0; top: 0; width: 46px; height: 46px; z-index: 5; }
+    .s11 .ring { position: absolute; left: 0; top: 0; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; border: 5px solid var(--accent); z-index: 4; }
+
+    /* ---------- Peter's generated lesson: a live page in the app's own look ---------- */
+    .s11 .app {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 70% 52%, #efeafb 0, rgba(247, 245, 239, 0) 46%), #f7f5ef;
+      overflow: hidden;
+      z-index: 3;
+    }
+    .s11 .atop {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      border-bottom: 1px solid #dedbd2;
+      background: rgba(247, 245, 239, 0.92);
+      z-index: 2;
+    }
+    .s11 .abrand { display: flex; align-items: flex-end; gap: 9px; font-size: 22px; font-weight: 700; letter-spacing: -0.02em; color: #22202d; }
+    .s11 .abrand .brand-mark i { width: 7px; }
+    .s11 .abrand .brand-mark i:nth-child(1) { height: 13px; }
+    .s11 .abrand .brand-mark i:nth-child(2) { height: 22px; }
+    .s11 .abrand .brand-mark i:nth-child(3) { height: 17px; }
+    .s11 .apills { display: flex; gap: 10px; }
+    .s11 .apill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid #d9d5cc;
+      background: #faf9f5;
+      font-size: 15px;
+      font-weight: 600;
+      color: #595560;
+    }
+    .s11 .apill.on { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-deep); }
+    .s11 .apill svg { width: 16px; height: 16px; }
+
+    .s11 .acol { position: absolute; left: 40px; top: 96px; width: 360px; }
+    .s11 .over { color: #c4573a; text-transform: uppercase; font-size: 14px; letter-spacing: 0.12em; font-weight: 700; }
+    .s11 .ah { margin-top: 12px; font-size: 46px; font-weight: 600; line-height: 1.02; letter-spacing: -0.05em; color: var(--ink); }
+    .s11 .ap { margin-top: 16px; font-size: 18px; line-height: 1.55; color: #63606b; }
+    .s11 .fit {
+      margin-top: 22px;
+      padding: 16px 18px 18px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 55px rgba(52, 45, 78, 0.07);
+    }
+    .s11 .fit small { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #8c8891; }
+    .s11 .chips { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 7px; }
+    .s11 .chip { padding: 6px 12px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent-deep); font-size: 14px; font-weight: 600; }
+    .s11 .steps { margin-top: 22px; display: flex; gap: 6px; }
+    .s11 .steps i { height: 6px; width: 38px; border-radius: 4px; background: #e5e1d9; }
+    .s11 .steps i.done { background: var(--accent); }
+    .s11 .steps i.now { background: #e1765b; }
+    .s11 .abtn {
+      margin-top: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 20px;
+      border-radius: 10px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 17px;
+      font-weight: 600;
+      box-shadow: 0 7px 18px rgba(41, 38, 50, 0.13);
+    }
+    .s11 .abtn svg { width: 18px; height: 18px; }
+
+    /* the 3D stage */
+    .s11 .stage { position: absolute; left: 400px; top: 56px; width: 810px; height: 700px; perspective: 1700px; perspective-origin: 50% 40%; }
+    .s11 .tilt { position: absolute; left: 90px; top: 200px; width: 440px; height: 300px; transform-style: preserve-3d; }
+    .s11 .stack { position: absolute; left: 0; top: 0; width: 440px; height: 300px; transform-style: preserve-3d; }
+    .s11 #s11-dots { position: absolute; inset: 0; transform-style: preserve-3d; }
+    .s11 .leads { position: absolute; inset: 0; width: 810px; height: 700px; overflow: visible; }
+    .s11 .leads path { fill: none; stroke: #b3a9dc; stroke-width: 2; stroke-dasharray: 1; }
+    .s11 .leads circle { fill: var(--accent); }
+    .s11 .plate { position: absolute; left: 0; top: 0; width: 440px; height: 300px; transform-style: preserve-3d; }
+    .s11 .face { position: absolute; inset: 0; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 60px rgba(60, 53, 88, 0.16); }
+    /* cut edge: the textbook cross-section, seen head-on in the 2D state */
+    .s11 .edge {
+      position: absolute;
+      left: 0;
+      top: 300px;
+      width: 440px;
+      transform-origin: 50% 0;
+      transform: rotateX(-90deg);
+      border-radius: 0 0 12px 12px;
+      overflow: hidden;
+    }
+    .s11 .tag {
+      position: absolute;
+      left: 590px;
+      top: 0;
+      width: 205px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px 9px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--border);
+      box-shadow: 0 15px 35px rgba(47, 40, 75, 0.12);
+      font-size: 15px;
+      line-height: 1.25;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .s11 .tag b { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+    .s11 .tag i { width: 12px; height: 12px; border-radius: 50%; flex: none; }
+    .s11 .dot { position: absolute; left: 0; top: 0; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; }
+    .s11 .ph { background: #f2cf55; box-shadow: 0 0 18px 6px rgba(242, 207, 85, 0.75); }
+    .s11 .co { background: #7fa9c4; box-shadow: 0 0 10px 2px rgba(127, 169, 196, 0.5); }
+    .s11 .ox { background: #e8957d; box-shadow: 0 0 10px 2px rgba(232, 149, 125, 0.5); }
+
+    .s11 .eq {
+      position: absolute;
+      left: 405px;
+      top: 652px;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(105, 85, 198, 0.2);
+      background: rgba(255, 255, 255, 0.85);
+      font-size: 17px;
+      font-weight: 600;
+      color: #5f557f;
+    }
+    .s11 .lens {
+      position: absolute;
+      left: 0;
+      top: 345px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--accent);
+      box-shadow: 0 25px 60px rgba(73, 55, 154, 0.25);
+      overflow: hidden;
+    }
+    .s11 .lens svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .s11 .lenscap {
+      position: absolute;
+      left: 0;
+      top: 496px;
+      width: 150px;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+    .s11 .lenscap em { font-size: 17px; }
+  </style>
+  <div id="root" data-composition-id="s11" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide s11">
+      <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span>morph</div>
+      <div class="side"><div class="kicker" id="s11-k">Erschaffen</div></div>
+      <div class="cap" id="s11-c0">Ein <em>Klick.</em></div>
+      <div class="cap" id="s11-c1">MORPH baut Peters <em>Seite.</em></div>
+      <div class="cap" id="s11-c2">Aus 2D wird <em>3D.</em></div>
+      <div class="cap" id="s11-c3">Wissenschaft zum <em>Anfassen.</em></div>
+      <div class="win" id="s11-win">
+        <div class="bar"><i></i><i></i><i></i><span>binnendifferenzierung.online</span></div>
+        <div class="vp">
+          <div class="cam" id="s11-cam">
+            <img class="shot" id="s11-magic" src="assets/journey/d01-magic.webp" alt="Hier entsteht deine magische Lösung" />
+            <img class="shot" id="s11-la" src="assets/journey/d02-loader-a.webp" alt="Morph liest deinen Text" />
+            <img class="shot" id="s11-lb" src="assets/journey/d03-loader-b.webp" alt="" />
+            <div class="ring" id="s11-ring" aria-hidden="true"></div>
+            <svg class="cursor" id="s11-cur" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2l15 9.5-6.6 1.4 3.9 7.3-3 1.6-3.9-7.3L4 19z" fill="#292632" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          </div>
+
+          <div class="app" id="s11-app">
+            <div class="atop" id="s11-atop">
+              <div class="abrand"><span class="brand-mark"><i></i><i></i><i></i></span>morph</div>
+              <div class="apills">
+                <span class="apill on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/></svg>Fokusmodus</span>
+                <span class="apill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>5 Min</span>
+              </div>
+            </div>
+            <div class="acol" id="s11-acol">
+              <div class="over" id="s11-a1">Mission 1 von 3 · für Peter</div>
+              <div class="ah" id="s11-a2">Wie baut ein Blatt <em>Zucker?</em></div>
+              <p class="ap" id="s11-a3">Wie dein Ofen in Minecraft: Licht, Wasser und CO₂ rein – Zucker und Sauerstoff raus.</p>
+              <div class="fit" id="s11-a4">
+                <small>Für dich angepasst</small>
+                <div class="chips"><span class="chip">Kleine Schritte</span><span class="chip">Minecraft-Vergleich</span><span class="chip">Ausprobieren statt Lesen</span><span class="chip">Wenig Text</span></div>
+              </div>
+              <div class="steps" id="s11-a5"><i class="now"></i><i></i><i></i></div>
+              <div class="abtn" id="s11-a6">Ins Blatt zoomen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+            </div>
+
+            <div class="stage" id="s11-stage">
+              <div class="tilt" id="s11-tilt">
+              <div class="stack" id="s11-stack">
+                <!-- 1 · cuticle + upper epidermis -->
+                <div class="plate" id="s11-p1">
+                  <div class="face"><svg viewBox="0 0 440 300" width="440" height="300"><rect width="440" height="300" fill="#eef6f1"/><g fill="none" stroke="#bcd8c8" stroke-width="2">
+                    <path d="M0 50 H440 M0 100 H440 M0 150 H440 M0 200 H440 M0 250 H440"/><path d="M60 0 V50 M150 0 V50 M250 0 V50 M350 0 V50 M20 50 V100 M110 50 V100 M210 50 V100 M310 50 V100 M400 50 V100 M70 100 V150 M170 100 V150 M270 100 V150 M370 100 V150 M30 150 V200 M120 150 V200 M220 150 V200 M330 150 V200 M80 200 V250 M180 200 V250 M290 200 V250 M390 200 V250 M40 250 V300 M140 250 V300 M240 250 V300 M340 250 V300"/></g>
+                    <rect width="440" height="300" fill="url(#s11-sheen)"/><defs><linearGradient id="s11-sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.7"/><stop offset="0.5" stop-color="#fff" stop-opacity="0"/></linearGradient></defs></svg></div>
+                  <div class="edge" style="height: 46px"><svg viewBox="0 0 440 46" width="440" height="46" preserveAspectRatio="none"><rect width="440" height="10" fill="#cfe6d9"/><rect y="10" width="440" height="36" fill="#e3f0e9"/><g stroke="#a8cbb8" stroke-width="2"><path d="M0 10 H440"/><path d="M40 10 V46 M95 10 V46 M150 10 V46 M205 10 V46 M260 10 V46 M315 10 V46 M370 10 V46 M420 10 V46"/></g></svg></div>
+                </div>
+                <!-- 2 · palisade layer, packed with chloroplasts -->
+                <div class="plate" id="s11-p2">
+                  <div class="face" id="s11-p2f"><svg viewBox="0 0 440 300" width="440" height="300"><rect width="440" height="300" fill="#dff0e6"/><g id="s11-cells"></g></svg></div>
+                  <div class="edge" style="height: 92px"><svg viewBox="0 0 440 92" width="440" height="92" preserveAspectRatio="none"><rect width="440" height="92" fill="#e3f0e9"/><g id="s11-pal" fill="#c9e3d4" stroke="#89b6a1" stroke-width="2"></g></svg></div>
+                </div>
+                <!-- 3 · spongy layer, air spaces -->
+                <div class="plate" id="s11-p3">
+                  <div class="face"><svg viewBox="0 0 440 300" width="440" height="300"><rect width="440" height="300" fill="#eef6f1"/><g id="s11-spongy" fill="#d6ebdf" stroke="#a8cbb8" stroke-width="2"></g></svg></div>
+                  <div class="edge" style="height: 70px"><svg viewBox="0 0 440 70" width="440" height="70" preserveAspectRatio="none"><rect width="440" height="70" fill="#f1f8f4"/><g id="s11-spe" fill="#d6ebdf" stroke="#a8cbb8" stroke-width="2"></g></svg></div>
+                </div>
+                <!-- 4 · lower epidermis with stomata -->
+                <div class="plate" id="s11-p4">
+                  <div class="face"><svg viewBox="0 0 440 300" width="440" height="300"><rect width="440" height="300" fill="#e3f0e9"/><g id="s11-stomata"></g></svg></div>
+                  <div class="edge" style="height: 40px"><svg viewBox="0 0 440 40" width="440" height="40" preserveAspectRatio="none"><rect width="440" height="40" fill="#cfe6d9"/><g fill="#f7f5ef"><rect x="96" y="0" width="22" height="40"/><rect x="246" y="0" width="22" height="40"/><rect x="380" y="0" width="22" height="40"/></g></svg></div>
+                </div>
+                <div id="s11-dots"></div>
+              </div>
+              </div>
+              <svg class="leads" id="s11-leads" viewBox="0 0 810 700" aria-hidden="true"></svg>
+
+              <div class="tag" id="s11-t1"><i style="background:#89b6a1"></i><span><b style="color:#47735e">Epidermis</b>Schutzschicht · lässt Licht durch</span></div>
+              <div class="tag" id="s11-t2"><i style="background:#47735e"></i><span><b style="color:#47735e">Palisadengewebe</b>Hier sitzen die Chloroplasten</span></div>
+              <div class="tag" id="s11-t3"><i style="background:#7fa9c4"></i><span><b style="color:#47718a">Schwammgewebe</b>Luftraum · CO₂ verteilt sich</span></div>
+              <div class="tag" id="s11-t4"><i style="background:#e8957d"></i><span><b style="color:#b2644f">Spaltöffnungen</b>CO₂ rein · O₂ raus</span></div>
+              <div class="lens" id="s11-lens">
+                <svg viewBox="0 0 190 190" aria-hidden="true">
+                  <rect width="190" height="190" fill="#f0f8f3"/>
+                  <ellipse cx="95" cy="95" rx="78" ry="50" fill="#cfe6d9" stroke="#47735e" stroke-width="3"/>
+                  <ellipse cx="95" cy="95" rx="68" ry="41" fill="#e3f0e9"/>
+                  <g fill="#89b6a1" stroke="#47735e" stroke-width="1.5">
+                    <rect x="42" y="72" width="22" height="9" rx="4"/><rect x="42" y="84" width="22" height="9" rx="4"/><rect x="42" y="96" width="22" height="9" rx="4"/><rect x="42" y="108" width="22" height="9" rx="4"/>
+                    <rect x="84" y="66" width="22" height="9" rx="4"/><rect x="84" y="78" width="22" height="9" rx="4"/><rect x="84" y="90" width="22" height="9" rx="4"/><rect x="84" y="102" width="22" height="9" rx="4"/><rect x="84" y="114" width="22" height="9" rx="4"/>
+                    <rect x="126" y="72" width="22" height="9" rx="4"/><rect x="126" y="84" width="22" height="9" rx="4"/><rect x="126" y="96" width="22" height="9" rx="4"/><rect x="126" y="108" width="22" height="9" rx="4"/>
+                  </g>
+                  <path d="M64 88 C 72 80, 78 80, 84 86 M106 92 C 114 84, 120 84, 126 90" stroke="#47735e" stroke-width="2" fill="none"/>
+                </svg>
+              </div>
+              <div class="lenscap" id="s11-lenscap">Chloroplast<br /><em>= dein Ofen</em></div>
+              <div class="eq" id="s11-eq">6 CO₂ + 6 H₂O + Licht → C₆H₁₂O₆ + 6 O₂</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      // S11 · Erschaffen — Peter starts the build (real magic page + loader), then his lesson appears:
+      // a leaf cross-section that turns from a 2D textbook drawing into an exploded 3D view.
+      // Holds: 1.2 (magic page), 5.4 (lesson page, 2D), 9.3 (exploded 3D, labelled), 10.9 (light, CO₂, O₂ flowing).
+      var W = 2160, VW = 1210, VH = 756, BASE = VW / W;
+      var OPEN = [935, 1106, 291, 92];
+      var tl = gsap.timeline({ paused: true });
+      var camAt = { x: 0, y: 0, scale: BASE };
+      function cam(at, cx, cy, z, dur) {
+        var s = BASE * z, H = 1350;
+        var next = { x: Math.min(0, Math.max(VW - W * s, VW / 2 - cx * s)), y: Math.min(0, Math.max(VH - H * s, VH / 2 - cy * s)), scale: s };
+        tl.fromTo("#s11-cam", camAt, Object.assign({ duration: dur, ease: "power2.inOut", immediateRender: false }, next), at);
+        camAt = next;
+      }
+      function show(at, id, dur) {
+        tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: dur || 0.3, ease: "power1.out" }, at);
+      }
+      function caption(at, out, inn) {
+        if (out) tl.fromTo(out, { opacity: 1, y: 0 }, { opacity: 0, y: -20, duration: 0.25, ease: "power1.in", immediateRender: false }, at);
+        tl.fromTo(inn, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, at + (out ? 0.2 : 0));
+      }
+
+      // ---- deterministic drawing of the cell layers ----
+      var NS = "http://www.w3.org/2000/svg";
+      function el(parent, tag, attrs) {
+        var e = document.createElementNS(NS, tag);
+        for (var k in attrs) e.setAttribute(k, attrs[k]);
+        parent.appendChild(e);
+        return e;
+      }
+      var h = function (i) { return ((i * 2654435761) >>> 0) % 1000 / 1000; };
+      // palisade cells seen from above: rounded columns with chloroplasts
+      var cells = document.getElementById("s11-cells");
+      for (var r = 0; r < 5; r++) {
+        for (var c = 0; c < 9; c++) {
+          var x = 14 + c * 47 + (r % 2) * 20, y = 14 + r * 56;
+          el(cells, "rect", { x: x, y: y, width: 40, height: 48, rx: 18, fill: "#c9e3d4", stroke: "#89b6a1", "stroke-width": 2 });
+          for (var k = 0; k < 4; k++) {
+            el(cells, "ellipse", { cx: x + 10 + (k % 2) * 20, cy: y + 13 + Math.floor(k / 2) * 22, rx: 6, ry: 4.5, fill: "#5f9a7d" });
+          }
+        }
+      }
+      var pal = document.getElementById("s11-pal");
+      for (var c2 = 0; c2 < 11; c2++) {
+        var px = 6 + c2 * 39.5;
+        el(pal, "rect", { x: px, y: 6, width: 34, height: 80, rx: 14 });
+        for (var k2 = 0; k2 < 4; k2++) el(pal, "ellipse", { cx: px + 17, cy: 20 + k2 * 17, rx: 8, ry: 5, fill: "#5f9a7d", stroke: "none" });
+      }
+      var spongy = document.getElementById("s11-spongy");
+      for (var i = 0; i < 34; i++) {
+        el(spongy, "ellipse", { cx: 24 + h(i) * 392, cy: 22 + h(i + 77) * 256, rx: 18 + h(i + 5) * 14, ry: 13 + h(i + 9) * 10 });
+      }
+      var spe = document.getElementById("s11-spe");
+      for (var j = 0; j < 12; j++) el(spe, "ellipse", { cx: 18 + j * 37 + h(j) * 8, cy: 20 + (j % 2) * 28, rx: 16, ry: 12 });
+      var st = document.getElementById("s11-stomata");
+      [[107, 70], [257, 150], [391, 230], [60, 220], [190, 40], [330, 80]].forEach(function (p) {
+        el(st, "ellipse", { cx: p[0], cy: p[1], rx: 20, ry: 13, fill: "#b9d7c6", stroke: "#89b6a1", "stroke-width": 2 });
+        el(st, "ellipse", { cx: p[0], cy: p[1], rx: 9, ry: 4, fill: "#f7f5ef" });
+      });
+
+      // ---- flow particles live inside the 3D stack, so they follow the explosion ----
+
+      // the tilt tips the drawing back; the stack turns it into a diamond, so the layers separate straight up
+      var TILT = { rotationX: 58, y: -28, scale: 0.6 };
+      var TURN = { rotationZ: -45 };
+      var Z = { p1: 270, p2: 90, p3: -90, p4: -270 };
+      var dots = document.getElementById("s11-dots");
+      var photons = [], co2 = [], o2 = [];
+      function dot(cls, list, n) {
+        for (var q = 0; q < n; q++) {
+          var d = document.createElement("div");
+          d.className = "dot " + cls;
+          dots.appendChild(d);
+          list.push(d);
+        }
+      }
+      dot("ph", photons, 18);
+      dot("co", co2, 8);
+      dot("ox", o2, 8);
+
+      // ---- labels on the right, leader lines to where each exploded plate ends up ----
+      // (anchors measured once from the FINAL pose; re-measure if the stack geometry changes)
+      var leadSvg = document.getElementById("s11-leads");
+      var leads = [];
+      var ANCHORS = [[475, 86], [472, 262], [468, 418], [465, 558]];
+      var ys = [56, 232, 388, 528];
+      ANCHORS.forEach(function (pt, n) {
+        document.getElementById("s11-t" + (n + 1)).style.top = ys[n] + "px";
+        var ty = ys[n] + 30;
+        leads.push(el(leadSvg, "path", { d: "M " + pt[0] + " " + pt[1] + " C " + (pt[0] + 60) + " " + pt[1] + ", 540 " + ty + ", 588 " + ty, pathLength: 1 }));
+        el(leadSvg, "circle", { cx: pt[0], cy: pt[1], r: 5 });
+      });
+
+      // ---- initial state ----
+      tl.set(["#s11-la", "#s11-lb", "#s11-app", "#s11-ring", "#s11-c1", "#s11-c2", "#s11-c3", "#s11-t1", "#s11-t2", "#s11-t3", "#s11-t4", "#s11-lens", "#s11-lenscap", "#s11-eq"], { opacity: 0 }, 0);
+      tl.set("#s11-cam", { transformOrigin: "0 0", scale: BASE, x: 0, y: 0 }, 0);
+      tl.set("#s11-cur", { x: 1500, y: 1250, transformOrigin: "0 0" }, 0);
+      // 2D: looking at the cut edge straight on, the layers stacked like a textbook figure
+      tl.set("#s11-tilt", { rotationX: -90, y: 40, scale: 1.25 }, 0);
+      tl.set("#s11-stack", { rotationZ: 0 }, 0);
+      tl.set("#s11-p1", { z: 46 + 92 + 70 }, 0);
+      tl.set("#s11-p2", { z: 92 + 70 }, 0);
+      tl.set("#s11-p3", { z: 70 }, 0);
+      tl.set("#s11-p4", { z: 0 }, 0);
+      tl.set(photons.concat(co2, o2), { opacity: 0 }, 0);
+      tl.set("#s11-leads circle", { opacity: 0 }, 0);
+
+      // entrance → hold 1.2: the magic page
+      tl.fromTo(".s11 .brand", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0);
+      tl.fromTo("#s11-k", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0);
+      tl.fromTo("#s11-win", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.05);
+      caption(0.25, null, "#s11-c0");
+      tl.fromTo("#s11-cur", { x: 1500, y: 1250 }, { x: OPEN[0] + OPEN[2] / 2, y: OPEN[1] + OPEN[3] * 0.55, duration: 0.55, ease: "power2.inOut", immediateRender: false }, 0.55);
+
+      // → hold 5.4: "Lösung öffnen", the Morph loader, then Peter's page builds itself
+      tl.fromTo("#s11-ring", { x: OPEN[0] + OPEN[2] / 2, y: OPEN[1] + OPEN[3] / 2, scale: 0.3, opacity: 0.9 }, { scale: 1.2, opacity: 0, duration: 0.4, ease: "power2.out", immediateRender: false }, 1.3);
+      tl.fromTo("#s11-cur", { scale: 1 }, { scale: 0.82, duration: 0.08, yoyo: true, repeat: 1, immediateRender: false }, 1.3);
+      show(1.45, "#s11-la", 0.3);
+      tl.fromTo("#s11-cur", { opacity: 1 }, { opacity: 0, duration: 0.2, immediateRender: false }, 1.5);
+      caption(1.5, "#s11-c0", "#s11-c1");
+      cam(1.6, 1080, 1150, 1.25, 0.8);
+      [2.0, 2.45, 2.9].forEach(function (at, n) {
+        tl.fromTo("#s11-lb", { opacity: n % 2 ? 1 : 0 }, { opacity: n % 2 ? 0 : 1, duration: 0.3, ease: "sine.inOut", immediateRender: false }, at);
+      });
+      tl.fromTo("#s11-app", { opacity: 0, scale: 1.04 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" }, 3.3);
+      tl.fromTo("#s11-atop", { y: -56 }, { y: 0, duration: 0.4, ease: "power3.out" }, 3.4);
+      ["#s11-a1", "#s11-a2", "#s11-a3", "#s11-a4", "#s11-a5", "#s11-a6"].forEach(function (id, n) {
+        tl.fromTo(id, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 3.55 + n * 0.1);
+      });
+      ["#s11-p4", "#s11-p3", "#s11-p2", "#s11-p1"].forEach(function (id, n) {
+        tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power1.out" }, 3.8 + n * 0.18);
+      });
+      tl.fromTo("#s11-tilt", { y: 70 }, { y: 40, duration: 0.9, ease: "power3.out", immediateRender: false }, 3.8);
+
+      // → hold 9.3: the drawing tips back into 3D and explodes into its tissue layers
+      caption(5.5, "#s11-c1", "#s11-c2");
+      tl.fromTo("#s11-a6", { scale: 1 }, { scale: 0.95, duration: 0.1, yoyo: true, repeat: 1, immediateRender: false }, 5.5);
+      tl.fromTo("#s11-tilt", { rotationX: -90, y: 40, scale: 1.25 }, Object.assign({ duration: 1.5, ease: "power3.inOut", immediateRender: false }, TILT), 5.75);
+      tl.fromTo("#s11-stack", { rotationZ: 0 }, Object.assign({ duration: 1.5, ease: "power3.inOut", immediateRender: false }, TURN), 5.75);
+      tl.fromTo("#s11-p1", { z: 208 }, { z: Z.p1, duration: 1.1, ease: "back.out(1.6)", immediateRender: false }, 6.75);
+      tl.fromTo("#s11-p2", { z: 162 }, { z: Z.p2, duration: 1.1, ease: "back.out(1.6)", immediateRender: false }, 6.8);
+      tl.fromTo("#s11-p3", { z: 70 }, { z: Z.p3, duration: 1.1, ease: "back.out(1.6)", immediateRender: false }, 6.85);
+      tl.fromTo("#s11-p4", { z: 0 }, { z: Z.p4, duration: 1.1, ease: "back.out(1.6)", immediateRender: false }, 6.9);
+      ["#s11-t1", "#s11-t2", "#s11-t3", "#s11-t4"].forEach(function (id, n) {
+        tl.fromTo(leadSvg.querySelectorAll("circle")[n], { opacity: 0 }, { opacity: 1, duration: 0.2 }, 7.6 + n * 0.12);
+        tl.fromTo(leads[n], { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, 7.6 + n * 0.12);
+        tl.fromTo(id, { opacity: 0, x: -12 }, { opacity: 1, x: 0, duration: 0.35, ease: "power2.out" }, 7.75 + n * 0.12);
+      });
+      tl.fromTo("#s11-p2f", { boxShadow: "0 30px 60px rgba(60,53,88,0.16)" }, { boxShadow: "0 0 0 4px rgba(105,85,198,0.6), 0 30px 70px rgba(73,55,154,0.3)", duration: 0.4 }, 8.3);
+      tl.fromTo("#s11-lens", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, 8.45);
+      tl.fromTo("#s11-lenscap", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35 }, 8.7);
+
+      // → hold 10.9: light falls into the chloroplasts, CO₂ comes in through the stomata, O₂ leaves
+      caption(9.4, "#s11-c2", "#s11-c3");
+      // two waves of light: each photon falls through the epidermis and is absorbed in the palisade layer
+      photons.forEach(function (d, n) {
+        var x = 40 + h(n + 3) * 360, y = 40 + h(n + 31) * 220, at = 9.4 + (n % 9) * 0.08 + (n < 9 ? 0 : 0.75);
+        tl.fromTo(d, { x: x, y: y, z: Z.p1 + 150, opacity: 0, scale: 1.4 }, { z: Z.p2 + 6, opacity: 1, scale: 1, duration: 0.6, ease: "power1.in" }, at);
+        tl.fromTo(d, { opacity: 1, scale: 1 }, { opacity: 0, scale: 0.2, duration: 0.2, immediateRender: false }, at + 0.6);
+      });
+      co2.forEach(function (d, n) {
+        var x = 80 + h(n + 50) * 300, y = 60 + h(n + 61) * 180, at = 9.5 + n * 0.09;
+        tl.fromTo(d, { x: x, y: y, z: Z.p4 - 120, opacity: 0 }, { z: Z.p3 + 30, opacity: 1, duration: 0.8, ease: "sine.inOut" }, at);
+      });
+      o2.forEach(function (d, n) {
+        var x = 90 + h(n + 90) * 280, y = 70 + h(n + 97) * 160, at = 9.9 + n * 0.08;
+        tl.fromTo(d, { x: x, y: y, z: Z.p2 - 10, opacity: 0 }, { z: Z.p4 - 150, opacity: 1, duration: 0.8, ease: "sine.inOut" }, at);
+      });
+      tl.fromTo("#s11-eq", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 10.2);
+
+      tl.set({}, {}, 11.4);
+      window.__timelines["s11"] = tl;
+    })();
+  </script>
+</template>

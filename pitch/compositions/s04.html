@@ -1,0 +1,120 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s04 .h2 { margin-top: 28px; font-size: 88px; }
+    .s04 .dot {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #cfcbd6;
+    }
+    .s04 .one {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      margin: -20px 0 0 -20px;
+      border-radius: 50%;
+      box-shadow: 0 8px 20px rgba(47, 40, 75, 0.14);
+    }
+    .s04 .x {
+      position: absolute;
+      width: 58px;
+      height: 58px;
+      margin: -29px 0 0 -29px;
+      color: #c4573a;
+    }
+    .s04 .frame {
+      position: absolute;
+      left: 146px;
+      top: 410px;
+      width: 888px;
+      height: 384px;
+      border: 3px solid var(--accent);
+      border-radius: 26px;
+      background: rgba(240, 236, 251, 0.45);
+    }
+    .s04 .tag {
+      position: absolute;
+      font-size: 40px;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+    .s04 .tag b { display: block; font-size: 48px; font-weight: 600; color: var(--ink); letter-spacing: -0.035em; }
+    .s04 .yes { color: #47735e; font-weight: 600; }
+    .s04 .no { color: #c4573a; font-weight: 600; }
+  </style>
+  <div id="root" data-composition-id="s04" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div class="slide s04">
+      <div class="pad">
+        <div class="kicker" id="s04-k">Das lohnt sich nicht</div>
+        <div class="h2" id="s04-h">Zu wenige für einen <em>Markt.</em></div>
+      </div>
+      <div class="frame" id="s04-frame" aria-hidden="true"></div>
+      <div id="s04-many" aria-hidden="true"></div>
+      <div id="s04-few" aria-hidden="true">
+        <div class="one" style="left: 1290px; top: 470px; background: #c9bdf3"></div>
+        <div class="one" style="left: 1560px; top: 520px; background: #9fc6b3"></div>
+        <div class="one" style="left: 1400px; top: 640px; background: #a9c6d8"></div>
+        <div class="one" style="left: 1690px; top: 690px; background: #f0bca9"></div>
+        <div class="one" style="left: 1250px; top: 760px; background: #e8d48d"></div>
+      </div>
+      <div id="s04-xs" aria-hidden="true"></div>
+      <div class="tag" id="s04-t1" style="left: 170px; top: 830px"><b>Eine Lösung für viele</b><span class="yes">✓ lohnt sich</span></div>
+      <div class="tag" id="s04-t2" style="left: 1240px; top: 830px"><b>Lösungen für wenige</b><span class="no">✗ lohnt sich nicht</span></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var E = "power3.out";
+      function rise(tl, target, at, opts) {
+        tl.fromTo(target, { opacity: 0, y: opts && opts.y != null ? opts.y : 28 }, Object.assign({ opacity: 1, y: 0, duration: 0.45, ease: E }, opts || {}, { y: 0 }), at);
+      }
+
+      // S04 · Das lohnt sich nicht — holds at 1.0 (the many vs. the few) and 2.8 (who gets a product)
+      var many = document.getElementById("s04-many");
+      var dots = [];
+      for (var r = 0; r < 8; r++) {
+        for (var c = 0; c < 20; c++) {
+          var d = document.createElement("div");
+          d.className = "dot";
+          d.style.left = 170 + c * 42 + "px";
+          d.style.top = 432 + r * 42 + "px";
+          many.appendChild(d);
+          dots.push(d);
+        }
+      }
+      var few = document.querySelectorAll("#s04-few .one");
+      var xs = document.getElementById("s04-xs");
+      var marks = [];
+      few.forEach(function (o) {
+        var x = document.createElement("div");
+        x.className = "x";
+        x.style.left = o.style.left;
+        x.style.top = o.style.top;
+        x.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+        xs.appendChild(x);
+        marks.push(x);
+      });
+
+      var tl = gsap.timeline({ paused: true });
+      rise(tl, ".s04 .kicker", 0, { y: 20 });
+      rise(tl, "#s04-h", 0.1, { y: 40, duration: 0.55 });
+      tl.fromTo(dots, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2)", stagger: { grid: [8, 20], from: "start", amount: 0.4 } }, 0.25);
+      tl.fromTo(few, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.4)", stagger: 0.06 }, 0.55);
+
+      // click: the many get one product, the few get nothing
+      tl.fromTo("#s04-frame", { opacity: 0, scale: 1.06 }, { opacity: 1, scale: 1, duration: 0.4, ease: E }, 1.1);
+      tl.fromTo(dots, { backgroundColor: "#cfcbd6" }, { backgroundColor: "#8f7fd6", duration: 0.35, stagger: { grid: [8, 20], from: "center", amount: 0.25 } }, 1.2);
+      rise(tl, "#s04-t1", 1.4);
+      tl.fromTo(marks, { opacity: 0, scale: 0.3, rotation: -45 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.3, ease: "back.out(2.6)", stagger: 0.08 }, 1.85);
+      tl.fromTo(few, { opacity: 1 }, { opacity: 0.35, duration: 0.3, stagger: 0.08, immediateRender: false }, 1.95);
+      rise(tl, "#s04-t2", 2.15);
+      tl.set({}, {}, 3.5);
+      window.__timelines["s04"] = tl;
+    })();
+  </script>
+</template>

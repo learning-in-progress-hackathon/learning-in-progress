@@ -1,0 +1,148 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s14 .center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 46px;
+    }
+    .s14 .canvas {
+      position: relative;
+      width: 1120px;
+      height: 560px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      box-shadow: var(--card-shadow);
+      padding: 60px 64px;
+      overflow: hidden;
+    }
+    .s14 .sk {
+      position: absolute;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #f0ecfb 0%, #e3dcf8 50%, #f0ecfb 100%);
+      background-size: 200% 100%;
+    }
+    .s14 .status {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 46px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+    .s14 .msgs { display: grid; }
+    .s14 .msgs > span { grid-area: 1 / 1; white-space: nowrap; }
+    .s14 .msgs .done { color: var(--accent-deep); }
+    .s14 .spark {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #806bd9, #5743ae);
+      box-shadow: 0 18px 40px rgba(73, 55, 154, 0.28);
+    }
+    .s14 .spark svg { position: absolute; left: 15px; top: 15px; width: 34px; height: 34px; }
+    .s14 .track {
+      width: 1120px;
+      height: 10px;
+      border-radius: 99px;
+      background: #e1ded5;
+      overflow: hidden;
+    }
+    .s14 .fill {
+      height: 100%;
+      width: 100%;
+      border-radius: 99px;
+      background: var(--accent);
+      transform-origin: left center;
+    }
+  </style>
+  <div id="root" data-composition-id="s14" data-width="1920" data-height="1080">
+    <div class="slide s14">
+      <div class="center">
+        <div class="canvas" id="s14-canvas">
+          <div class="sk" id="s14-sk1" style="left: 64px; top: 62px; width: 180px; height: 34px"></div>
+          <div class="sk" id="s14-sk2" style="left: 64px; top: 140px; width: 820px; height: 70px"></div>
+          <div class="sk" id="s14-sk3" style="left: 64px; top: 222px; width: 400px; height: 70px"></div>
+          <div class="sk" id="s14-sk4" style="left: 64px; top: 372px; width: 266px; height: 116px"></div>
+          <div class="sk" id="s14-sk5" style="left: 364px; top: 372px; width: 266px; height: 116px"></div>
+          <div class="sk" id="s14-sk6" style="left: 664px; top: 372px; width: 116px; height: 116px"></div>
+        </div>
+        <div class="status">
+          <div class="spark" id="s14-spark"><svg id="s14-star" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2Z"/></svg><svg id="s14-check" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path id="s14-checkp" pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <div class="msgs">
+            <span id="s14-m0">… generating a team slide …</span>
+            <span id="s14-m1">Reading transcript …</span>
+            <span id="s14-m2">Choosing layout …</span>
+            <span id="s14-m3">Rendering slide …</span>
+            <span class="done" id="s14-m4">Done — team slide ready.</span>
+          </div>
+        </div>
+        <div class="track"><div class="fill" id="s14-fill"></div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+    var E = "power3.out";
+
+    // Fade-and-rise entrance, the deck's default motion.
+    function rise(tl, target, at, opts) {
+      tl.fromTo(
+        target,
+        { opacity: 0, y: opts && opts.y != null ? opts.y : 40 },
+        Object.assign({ opacity: 1, y: 0, duration: 0.7, ease: E }, opts || {}, { y: 0 }),
+        at,
+      );
+    }
+
+    // Every slide's brand + kicker enter the same way.
+    function head(tl, id) {
+      rise(tl, "." + id + " .brand", 0, { y: 0, duration: 0.5 });
+      rise(tl, "." + id + " .kicker", 0.1);
+    }
+
+      
+
+    // S14 · Generating — plays out by ~3.5 s, holds the finished state at 3.6
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      rise(tl, "#s14-canvas", 0, { y: 30, duration: 0.6 });
+      rise(tl, ".s14 .status", 0.15, { y: 20, duration: 0.5 });
+      rise(tl, ".s14 .track", 0.25, { y: 0, duration: 0.4 });
+
+      // Status messages: crossfade through the steps, end on "ready".
+      var msgs = ["#s14-m0", "#s14-m1", "#s14-m2", "#s14-m3", "#s14-m4"];
+      var at = [0, 1.0, 1.7, 2.4, 3.1];
+      tl.set(msgs.slice(1), { opacity: 0 }, 0);
+      for (var i = 1; i < msgs.length; i++) {
+        tl.fromTo(msgs[i - 1], { opacity: 1, y: 0 }, { opacity: 0, y: -18, duration: 0.2, ease: "power1.in", immediateRender: false }, at[i]);
+        tl.fromTo(msgs[i], { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.25, ease: E }, at[i] + 0.15);
+      }
+
+      // Skeleton blocks pop in, shimmer, then settle.
+      tl.fromTo(".sk", { opacity: 0, scaleX: 0.3, transformOrigin: "left center" }, { opacity: 1, scaleX: 1, duration: 0.45, ease: E, stagger: 0.22 }, 0.45);
+      tl.fromTo(".sk", { backgroundPosition: "100% 0" }, { backgroundPosition: "-100% 0", duration: 1.1, ease: "none", repeat: 1 }, 0.45);
+
+      // Progress + spark; the spark turns into a check when done.
+      tl.fromTo("#s14-fill", { scaleX: 0 }, { scaleX: 1, duration: 2.75, ease: "power1.inOut" }, 0.35);
+      tl.fromTo("#s14-star", { rotate: 0 }, { rotate: 360, duration: 2.8, ease: "power1.inOut" }, 0.3);
+      tl.fromTo("#s14-star", { opacity: 1, scale: 1 }, { opacity: 0, scale: 0.4, duration: 0.2, ease: "power1.in", immediateRender: false }, 3.05);
+      tl.fromTo("#s14-checkp", { strokeDasharray: 1, strokeDashoffset: 1 }, { strokeDasharray: 1, strokeDashoffset: 0, duration: 0.35, ease: "power2.out" }, 3.15);
+      tl.fromTo("#s14-spark", { scale: 1 }, { scale: 1.14, duration: 0.16, ease: "power2.out", yoyo: true, repeat: 1 }, 3.15);
+      tl.fromTo("#s14-canvas", { boxShadow: "0 24px 70px rgba(60,53,88,0.08)" }, { boxShadow: "0 30px 90px rgba(105,85,198,0.22)", duration: 0.5, ease: E }, 3.15);
+      tl.set({}, {}, 4);
+      window.__timelines["s14"] = tl;
+    })();
+    })();
+  </script>
+</template>

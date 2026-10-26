@@ -1,0 +1,54 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .s05 .lines { position: absolute; left: 170px; top: 330px; }
+    .s05 .h1 { font-size: 150px; }
+    .s05 .line2 { margin-top: 40px; }
+  </style>
+  <div id="root" data-composition-id="s05" data-width="1920" data-height="1080">
+    <div class="slide s05">
+      <div class="pad"><div class="kicker" id="s05-k">In einer idealen Welt</div></div>
+      <div class="lines">
+        <div class="h1" id="s05-l1"><span class="strike-wrap"><span id="s05-t1">Eine UI für alle</span><span class="strike" id="s05-x"></span></span></div>
+        <div class="h1 line2" id="s05-l2">Eine UI für <em>jeden einzeln.</em></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+    var E = "power3.out";
+
+    // Fade-and-rise entrance, the deck's default motion.
+    function rise(tl, target, at, opts) {
+      tl.fromTo(
+        target,
+        { opacity: 0, y: opts && opts.y != null ? opts.y : 40 },
+        Object.assign({ opacity: 1, y: 0, duration: 0.45, ease: E }, opts || {}, { y: 0 }),
+        at,
+      );
+    }
+
+    // Every slide's brand + kicker enter the same way.
+    function head(tl, id) {
+      rise(tl, "." + id + " .kicker", 0, { y: 20 });
+    }
+
+      
+
+    // S05 · In einer idealen Welt — holds at 0.8 and 2.2
+    (function () {
+      var tl = gsap.timeline({ paused: true });
+      head(tl, "s05");
+      rise(tl, "#s05-l1", 0.1, { y: 40, duration: 0.55 });
+      tl.fromTo("#s05-x", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.inOut" }, 0.9);
+      tl.fromTo("#s05-t1", { opacity: 1 }, { opacity: 0.32, duration: 0.35, ease: "power1.out" }, 1.2);
+      rise(tl, "#s05-l2", 1.4, { y: 40, duration: 0.6 });
+      tl.set({}, {}, 3);
+      window.__timelines["s05"] = tl;
+    })();
+    })();
+  </script>
+</template>
